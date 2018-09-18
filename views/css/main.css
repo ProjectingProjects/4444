@@ -1,0 +1,160 @@
+html {
+    min-height: 100%;
+}
+
+body {
+    background-color: #8B0000;    
+}
+
+h3 span {
+  color: white;
+  background-color: rgba(0.0, 0.0, 0.0, 1.0);
+  padding: 5px 5px 5px 5px;
+  font-family: Patua One;
+  font-size: 2em;
+  font-size: 4vw;
+  letter-spacing: 1px;
+}
+
+h3 span.spacer {
+  padding: 5px;
+}
+
+hr {
+  color: black;
+}
+
+p span {
+  color: white;
+  background-color: black;
+  font-size: 2em;
+  font-size: 2vw;
+  padding: 5px 5px 5px 5px;
+  font-family: Oswald;
+}
+
+#pizzaLogo {
+  height: 50px;
+  width: 50px;
+  float: left;
+  padding: 0px;
+}
+
+#websiteTitle{
+  font-size: 4em;
+  text-align: center;
+  padding: 0px 20px 10px 0px;
+  font-family: 'Great Vibes';
+  margin: 0px;
+  float: left;
+  color: #B22222;
+  position: relative;
+}
+
+#websiteSlogan{
+  font-size: 4em;
+  vertical-align: sub;
+  font-family: 'Oswald';
+}
+
+#testBorder {
+    border: 20px solid;
+    padding: 0px;
+    -webkit-border-image: url(grunge.png) 30 round; /* Safari 3.1-5 */
+    -o-border-image: url(grunge.png) 30 round; /* Opera 11-12.1 */
+    border-image: url(grunge.png) 30 round;
+    overflow: visible;
+    height: 450px;
+    width: 600px;
+    position: absolute;
+    z-index: 0;
+}
+
+#pizzaInfo {
+    background-color: black;
+    width: 100%;
+    padding: 10px;
+    margin: 10px;
+}
+
+#debiPhoto {
+  height: 200px;
+  text-align: right;
+  padding: 0 15px;
+  float: left;
+}
+
+#infoText {
+  font-size: 8px;
+  font-family: Montserrat;
+}
+
+#slogan {
+  font-size: 15px;
+  letter-spacing: 1px;
+}
+
+#aboutDebi {
+  padding-top: 10px;
+}
+
+.jumbotron {
+  background-color: #f4f4f4;
+}
+
+@media screen and (max-width: 800px) {
+  #infoText {
+    font-size: 10px;
+  }
+  #slogan {
+    font-size: 20px;
+  }
+}
+
+@media screen and (min-width: 400px) {
+  #endline {
+    width: 100%;
+  }
+}
+
+@media screen and (min-width: 490px) {
+  #infoText {
+    font-size: 10px;
+  }
+  #slogan {
+    font-size: 11px;
+  }
+  #endline {
+    width: 59%;
+  }
+}
+
+@media screen and (min-width: 760px) {
+  #endline {
+    width: 70%;
+  }
+  #debiPhoto {
+    height: 175px;
+  }
+}
+
+@media screen and (min-width: 765px) {
+  #endline {
+    width: 75%;
+  }
+}
+
+@media screen and (min-width: 990px) {
+  #endline {
+    width: 84%;
+  }
+  #debiPhoto {
+    height: 150px;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  #endline {
+    width: 87%;
+  }
+}

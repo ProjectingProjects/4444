@@ -1,0 +1,81 @@
+body {
+  font-family: 'Roboto', sans-serif;
+  background: url('../images/restaurant.jpeg') no-repeat center center fixed;
+  background-size: cover;
+}
+
+.main-section {
+  margin: 0 auto;
+  margin-top: 130px;
+  padding: 0;
+}
+
+.modal-content {
+  background-color: #8B0000;
+  opacity: .95;
+  padding: 0 18px;
+  box-shadow: 0px 0px 3px #800000;
+  position: relative;
+}
+
+.form-group {
+  margin-bottom: 25px;
+}
+
+.form-group input {
+  height: 45px;
+  border-radius: 5px;
+  border: 0;
+  font-size: 18px;
+}
+
+.userID input{
+  background-image: url('../icons/single-01.svg');
+  background-position: 5px 2px;
+  background-repeat: no-repeat;
+  background-size: 35px 40px;
+  background-position: 7px 2px;
+  padding-left: 60px;
+}
+
+.pw input {
+  background-image: url('../icons/ic_lock_48px.svg');
+  background-position: 5px 2px;
+  background-repeat: no-repeat;
+  background-size: 40px 40px;
+  padding-left: 60px;
+}
+
+svg {
+  position:absolute;
+  display:inline-block;
+  width: 30px;
+  height:30px;
+  left:265px;
+  top:2px;
+}
+
+.login-btn {
+  width: 40%;
+  margin: 5px 0px 15px;
+  background-color: #EDC9AF;
+  color: #8B0000;
+  font-size: 20px;
+  padding: 7px 14px;
+  border-radius: 5px;
+  border-bottom: 4px solid #C19A6B;
+}
+
+.login-btn:hover, .btn:focus {
+  background-color: #C19A6B !important;
+  border-bottom: 4px solid #a38159 !important;
+}
+
+.forgot {
+  padding: 0px 0 25px;
+}
+
+.forgot a {
+  color: #6EE2FA;
+  font-size: 15px;
+}

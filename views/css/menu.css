@@ -1,0 +1,29 @@
+#menuImage {
+    width: 100vw;
+}
+
+#menu1 {
+  background-color: #DAA520;
+  display: inline-block;
+}
+
+#menu2 {
+  background-color: #FEFDFB;
+
+}
+
+#pizzaList {
+  font-size: 2em;
+  font-family: Oswald;
+}
+
+#pDescription {
+  font-size: 0.5em;
+}
+
+#foodTitle {
+  font-family: Acme;
+  font-size: 5em;
+  text-align: center;
+  color: #B22222;
+}
