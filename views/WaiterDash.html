@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html style="height: 100%;width: 100%;">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>WaiterDash</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="WaiterDash.css">
+</head>
+
+<body style="height: 100%;background-color: rgb(0,0,0);width: 100%;">
+    <div class="d-flex" style="width: 100%;">
+        <div class="col-3 text-center d-inline-flex flex-column justify-content-start align-items-stretch align-content-stretch TableCol" style="padding: 0px;">
+            <div style="width: 100%;position: relative;"><button class="btn btn-primary btn-lg border rounded shadow-lg d-block flex-grow-1" type="button" id="Table1" style="width: 100%;height: 23.7vh;padding: 0px;background-color: rgb(243,255,222);color: rgb(0,0,0);"><strong id="TableLabel1" class="TableLabel" style="margin: 0px;">Table 1</strong></button>
+                <div
+                    class="btn-group TblStatusInd" role="group" id="Tbl1StatusInd" style="height: 5.556vh;width: 9.896vw;"><button class="btn btn-primary paymentIndicator" type="button" style="width: 50%;">Button 1</button><button class="btn btn-primary helpIndicator" type="button" style="width: 50%;">Button 2</button></div>
+            </div>
+        <div style="width: 100%;position: relative;"><button class="btn btn-primary btn-lg border rounded shadow-lg d-block flex-grow-1" type="button" id="Table2" style="width: 100%;height: 23.7vh;padding: 0px;background-color: rgb(243,255,222);color: rgb(0,0,0);"><strong id="TableLabel2" class="TableLabel" style="margin: 0px;">Table 2</strong></button>
+            <div
+                class="btn-group TblStatusInd" role="group" id="Tbl2StatusInd" style="height: 5.556vh;width: 9.896vw;"><button class="btn btn-primary paymentIndicator" type="button" style="width: 50%;">Button 1</button><button class="btn btn-primary helpIndicator" type="button" style="width: 50%;">Button 2</button></div>
+        </div>
+    <div style="width: 100%;position: relative;"><button class="btn btn-primary btn-lg border rounded shadow-lg d-block flex-grow-1" type="button" id="Table3" style="width: 100%;height: 23.7vh;padding: 0px;background-color: rgb(243,255,222);color: rgb(0,0,0);"><strong id="TableLabel3" class="TableLabel" style="margin: 0px;">Table 3</strong></button>
+        <div
+            class="btn-group TblStatusInd" role="group" id="Tbl3StatusInd" style="height: 5.556vh;width: 9.896vw;"><button class="btn btn-primary paymentIndicator" type="button" style="width: 50%;">Button 1</button><button class="btn btn-primary helpIndicator" type="button" style="width: 50%;">Button 2</button></div>
+    </div>
+    <div style="width: 100%;position: relative;"><button class="btn btn-primary btn-lg border rounded shadow-lg d-block flex-grow-1" type="button" id="Table4" style="width: 100%;height: 23.7vh;padding: 0px;background-color: rgb(243,255,222);color: rgb(0,0,0);"><strong id="TableLabel4" class="TableLabel" style="margin: 0px;">Table 4</strong></button>
+        <div
+            class="btn-group TblStatusInd" role="group" id="Tbl4StatusInd" style="height: 5.556vh;width: 9.896vw;"><button class="btn btn-primary paymentIndicator" type="button" style="width: 50%;">Button 1</button><button class="btn btn-primary helpIndicator" type="button" style="width: 50%;">Button 2</button></div>
+    </div>
+    </div>
+    <div class="col-3 text-center d-inline-flex flex-column justify-content-start align-items-stretch align-content-stretch TableCol" style="padding: 0px;">
+        <div style="width: 100%;position: relative;"><button class="btn btn-primary btn-lg border rounded shadow-lg d-block flex-grow-1" type="button" id="Table5" style="width: 100%;height: 23.7vh;padding: 0px;background-color: rgb(243,255,222);color: rgb(0,0,0);"><strong id="TableLabel5" class="TableLabel" style="margin: 0px;">Table 5</strong></button>
+            <div
+                class="btn-group TblStatusInd" role="group" id="Tbl5StatusInd" style="height: 5.556vh;width: 9.896vw;"><button class="btn btn-primary paymentIndicator" type="button" style="width: 50%;">Button 1</button><button class="btn btn-primary helpIndicator" type="button" style="width: 50%;">Button 2</button></div>
+    </div>
+    <div style="width: 100%;position: relative;"><button class="btn btn-primary btn-lg border rounded shadow-lg d-block flex-grow-1" type="button" id="Table6" style="width: 100%;height: 23.7vh;padding: 0px;background-color: rgb(243,255,222);color: rgb(0,0,0);"><strong id="TableLabel6" class="TableLabel" style="margin: 0px;">Table 6</strong></button>
+        <div
+            class="btn-group TblStatusInd" role="group" id="Tbl6StatusInd" style="height: 5.556vh;width: 9.896vw;"><button class="btn btn-primary paymentIndicator" type="button" style="width: 50%;">Button 1</button><button class="btn btn-primary helpIndicator" type="button" style="width: 50%;">Button 2</button></div>
+    </div>
+    <div style="width: 100%;position: relative;"><button class="btn btn-primary btn-lg border rounded shadow-lg d-block flex-grow-1" type="button" id="Table7" style="width: 100%;height: 23.7vh;padding: 0px;background-color: rgb(243,255,222);color: rgb(0,0,0);"><strong id="TableLabel7" class="TableLabel" style="margin: 0px;">Table 7</strong></button>
+        <div
+            class="btn-group TblStatusInd" role="group" id="Tbl7StatusInd" style="height: 5.556vh;width: 9.896vw;"><button class="btn btn-primary paymentIndicator" type="button" style="width: 50%;">Button 1</button><button class="btn btn-primary helpIndicator" type="button" style="width: 50%;">Button 2</button></div>
+    </div>
+    <div style="width: 100%;position: relative;"><button class="btn btn-primary btn-lg border rounded shadow-lg d-block flex-grow-1" type="button" id="Table8" style="width: 100%;height: 23.7vh;padding: 0px;background-color: rgb(243,255,222);color: rgb(0,0,0);"><strong id="TableLabel8" class="TableLabel" style="margin: 0px;">Table 8</strong></button>
+        <div
+            class="btn-group TblStatusInd" role="group" id="Tbl8StatusInd" style="height: 5.556vh;width: 9.896vw;"><button class="btn btn-primary paymentIndicator" type="button" style="width: 50%;">Button 1</button><button class="btn btn-primary helpIndicator" type="button" style="width: 50%;">Button 2</button></div>
+    </div>
+    </div>
+    <div class="col-6 text-center d-inline-flex flex-column flex-fill justify-content-center align-items-stretch align-content-stretch align-self-start InfoCol" style="padding: 0px;"><strong style="color: rgb(255,255,255);font-size: 61px;">Daily Sales:</strong><span style="color: rgb(255,255,255);font-size: 54px;">$5,364.42</span></div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/canvasjs/1.7.0/jquery.canvasjs.min.js"></script>
+    <script src="../routes/WaiterDash/textFit.min.js"></script>
+    <script src="../routes/WaiterDash/makeIDrefString.js"></script>
+    <script src="../routes/WaiterDash/statusIndicators.js"></script>
+    <script src="../routes/WaiterDash/dynamicFuncs.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>AboutUs</title>
+
+    <!-- Bootstrap core CSS -->
+	<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+
+    <!-- Custom fonts for this template -->
+    <link href="https://fonts.googleapis.com/css?family=Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="business-casual.css" rel="stylesheet">
+
+    <script src="/socket.io/socket.io.js"></script>
+
+
+  </head>
+
+  <body>
+
+    <h1 class="site-heading text-center text-white d-none d-lg-block">
+      <span class="site-heading-upper text-primary mb-3">Let's enjoy the good food.</span>
+      <span class="site-heading-lower">JackSparrow's Restaurant and Bar</span>
+    </h1>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark py-lg-4" id="mainNav">
+      <div class="container">
+           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav mx-auto">
+            <li class="nav-item active px-lg-4">
+              <a class="nav-link text-uppercase text-expanded" href="index.html">AboutUs
+                <span class="sr-only">(current)</span>
+              </a>
+            </li>
+
+	    <li class="nav-item px-lg-4">
+              <a class="nav-link text-uppercase text-expanded" href="menu.html">Menu</a>
+            </li>
+
+            <li class="nav-item px-lg-4">
+              <a class="nav-link text-uppercase text-expanded" href="game1.html">Tic-Tac-Toe</a>
+            </li>
+	    <li class="nav-item px-lg-4">
+              <a class="nav-link text-uppercase text-expanded" href="game2.html">Hangman</a>
+            </li>
+
+	    <li class="nav-item px-lg-4">
+              <a style="display: none;" class="pay nav-link text-uppercase text-expanded" href="paymentDash.html">Payment</a>
+            </li>
+		
+	    <li class="nav-item px-lg-4">
+              <button style="display: none; color: white;" class="btn btn-danger food911-btn">Food 911</button>
+            </li>	
+
+	    <li class="nav-item px-lg-4">
+              <button style="display: none;" class="btn btn-warning refill-btn">Request Refills</button>
+            </li>	  
+
+	   </ul>
+        </div>
+      </div>
+    </nav>
+
+   
+    <section class="page-section cta">
+      <div class="container">
+        <div class="row">
+          <div class="col-xl-9 mx-auto">
+            <div class="cta-inner text-center rounded">
+              <h2 class="section-heading mb-4">
+                <span class="section-heading-upper">Our Promise</span>
+                <span class="section-heading-lower">To You</span>
+              </h2>
+              <p class="mb-0">When you walk into our restaurant, we are dedicated to providing you with friendly service, a welcoming atmosphere, and above all else, excellent food made with the highest quality ingredients. If you are not satisfied, please let us know and we will do whatever we can to make things right!</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer text-faded text-center py-5">
+      <div class="container">
+        <p class="m-0 small">Copyright &copy; Your Website 2018</p>
+      </div>
+    </footer>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+    <script>
+	$(document).ready(function() {
+
+		console.log("index here");
+
+		socket = io({transports: ['websocket']});    
+
+		socket.emit('menuLoad', {hello: 'Update menu'});
+		
+		socket.on('sayThanks', function(msg) {
+		console.log(msg);
+			//send user alert as thank you
+			alert(msg);
+		console.log("After message");
+
+		});
+
+		
+
+		var tableCookie = Cookies.get('table');
+		var orderCookie = Cookies.get('order');	
+	
+		if (orderCookie != undefined)
+		{
+			$(".food911-btn").css('display', 'block');
+			$(".refill-btn").css('display', 'block');
+			$(".pay").css('display', 'block');
+		}
+
+		$(".refill-btn").on("click", function() {
+
+			console.log("requesting refill");
+
+			//send request to manager from client to server back to client
+			socket.emit('refill', tableCookie);
+			alert("Requesting your Refills!");
+	
+		});
+
+
+		$(".food911-btn").on("click", function() {
+
+                        console.log("requesting help");
+
+                        //send request to manager from client to server back to client
+                        socket.emit('food911', tableCookie);
+                        alert("Staff will arrive to help you shortly!");
+        
+                });
+
+	});
+    </script>
+  </body>
+
+</html>

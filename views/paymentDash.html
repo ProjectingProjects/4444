@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>PaymentDash</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="paymentDash-Navigation-Clean.css">
+    <link rel="stylesheet" href="paymentDash.css">
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+
+</head>
+
+<body style="background-color: rgb(21,66,119);height: 100%;width: 100%;">
+	<!--MODAL CASH-->
+                <div class="modal fade" id="f911Alert" data-backdrop="false" role="dialog">
+                        <div class="modal-dialog">
+                                <div class="modal-content">
+                                        <div class="modal-header">
+                                                <h4>Alert Sent</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                        	<p class="alert">Please have your cash ready for your server to take</p>
+					</div>
+                                        <div class="modal-footer">
+                                                <button class="btn btn-primary ok">OK</button>
+                                        </div>
+                                </div>
+                        </div>
+		</div>
+		<div class="modal fade" id="bonusAlert" data-backdrop="false" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4>Payment Sent</h4>
+          </div>
+          <div class="modal-body">
+            <p class="alert">Would you like to play a bonus game to win a coupon?</p>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-primary yes">YES</button>
+            <button class="btn btn-primary nope">NO</button>
+          </div>
+        </div>
+      </div>
+    </div>
+	
+
+    <ul class="nav nav-tabs">
+        <li class="nav-item"><a class="nav-link active" href="#">First Item</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Second Item</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Third Item</a></li>
+    </ul>
+    <div class="container-fluid d-flex flex-row justify-content-start align-items-start align-content-start" id="MainArea" style="padding: 0px;">
+        <div class="d-inline-flex flex-column align-self-start" id="Bill-display" style="height: 1038px;width: 50%;background-color: #ffffff;">
+            <div class="row" style="margin: 0px -10px;">
+                <div class="col order" style="background-color: rgba(255,255,255,0);width: 50%;padding: 0px 15px;">
+                <h2> ORDER TOTAL </h2>
+		</div>
+	    </div>
+           <div class="row" style="margin: 0px -10px;">
+            <div class="compliment col" style="background-color: rgba(255,255,255,0);width: 50%;padding: 0px 15px;">
+                <h2> SEND A COMPLIMENT TO THE CHEF </h2>
+		<!-- COMPLIMENTS -->
+		<button class="btn btn-primary comp">Thanks for the Good Food!</button>
+		<button class="btn btn-primary comp">Love the atmosphere, but especially ADORE the food!</button>
+		<button class="btn btn-primary comp">Thanks for the most delicious meal!</button>
+                </div>
+	    </div>
+	</div>
+        <div class="d-inline-flex flex-column" id="PaymentControls" style="width: 50%;height: 1038px;color: rgb(255,255,255);">
+            <div>
+                <ul class="nav nav-tabs nav-fill">
+                    <li class="nav-item"><a class="nav-link active" role="tab" data-toggle="tab" href="#tab-1">Card</a></li>
+                    <li class="nav-item"><a class="nav-link" role="tab" data-toggle="tab" href="#tab-2">Cash</a></li>
+                </ul>
+                <div class="tab-content text-center">
+                    <div class="tab-pane" role="tabpanel" id="tab-2">
+			<button class="btn btn-primary cash-btn">Send Cash</button>
+                    </div>
+                    <div class="tab-pane active" role="tabpanel" id="tab-1">
+		    <dt>Card Number</dt>
+        <dd>
+            <input type="text" id="cc_no" name="cc_no" value="4111111111111111" size="16"/>
+            <span id="err_cc_no" class="jserror"> </span>
+        </dd>           
+        <dt>Exp. Date</dt>
+        <dd>
+                <tr>
+                    <td><select id="cc_exp_mm" name="cc_exp_mm">
+                            <option value="">Month</option>
+                            <option value="1" selected="selected">January</option>                                
+                            <option value="2">February</option>                             
+                            <option value="3">March</option>                          
+                            <option value="4">April</option>                          
+                            <option value="5">May</option>                           
+                            <option value="6">June</option>                           
+                            <option value="7">July</option>                          
+                            <option value="8">August</option>                            
+                            <option value="9">September</option>                    
+                            <option value="10">October</option>                             
+                            <option value="11">November</option>                            
+                            <option value="12">December</option>                            
+                        </select></td>                        
+                    <td width="20">&nbsp;</td>                        
+                    <td><select id="cc_exp_yyyy" name="cc_exp_yyyy">
+
+			<option value="">Month</option>
+                            <option value="2016" selected="selected">2016</option>                                
+                            <option value="2017">2017</option>                             
+                            <option value="2018">2018</option>                          
+                            <option value="2019">2019</option>                          
+                            <option value="2020">2020</option>                           
+                            <option value="2021">2021</option>                           
+                            <option value="2022">2022</option>                          
+                            <option value="2023">2023</option>                            
+                            <option value="2024">2024</option>                    
+                            <option value="2025">2025</option>                             
+                            <option value="2026">2026</option>                            
+                            <option value="2027">2027</option>
+			    <option value="2028">2028</option>                            
+                            <option value="2029">2029</option>
+			<option value="2030">2030</option>
+                        </select>                        
+                    </td>                    
+                </tr>                
+            </table>            
+        </dd>
+        <dt>Security Code</dt>
+        <dd>
+            <input id="cvv" type="text" size="3" name="cvv" value="111"/>
+        </dd>
+        </dl>    
+</fieldset>    
+<fieldset>
+  <form action="" id="couponForm">
+  <dl>  
+    <p>Redeem Coupon: <span class="promo"><input type="text" size="8" id="couponCode"/></span></p>          
+      <div role="group" class="btn-group">
+        <button id="applyCoupon-btn" class="btn btn-primary" type="button">Apply Coupon</button>
+        <button id="submitPayment-btn" class="btn btn-primary" type="button">Submit</button>
+      </div>
+
+    <p id="demo"></p>
+      
+  </dl>
+  </form>
+</fieldset>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.bundle.min.js"></script>
+    <script src="../routes/payment.js"></script>
+</body>
+
+</html>

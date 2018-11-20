@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html style="height: 100%;width: 100%;">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>ManagerDash</title>
+    
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/canvasjs/1.7.0/jquery.canvasjs.min.js"></script>	
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="ManagerDash.css">
+    <link rel="stylesheet" type="text/css" href="mandash.css">
+    <script src="../routes/mandash.js"></script>
+    <script src="../routes/ManagerDash/textFit.min.js"></script>
+</head>
+
+<body style="height: 100%;background-color: rgb(0,0,0);width: 100%;">
+    <div id="ScreenTabs" style="width: 100%;height: 100%;">
+      <!--MODAL ALERT-->
+      <div class="modal show" id="f911Alert" data-backdrop="false" role="dialog">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+                    <h4>ALERT!!</h4>
+            </div>
+            <div class="modal-body">
+                    <p class="alert"></p>
+            </div>
+            <div class="modal-footer">
+                    <a href="#close-modal" rel="modal:close" class="close-modal btn btn-primary ok">OK</a>
+            </div>
+          </div>
+        </div>
+      </div>
+        <ul class="nav nav-tabs nav-fill" id="tab-items" style="height: 5vh;">
+            <li class="nav-item"><a class="nav-link active" role="tab" data-toggle="tab" href="#Index" id="index-tab">Main</a></li>
+            <li class="nav-item"><a class="nav-link" role="tab" data-toggle="tab" href="#AssignTables" id="AssignTables-tab">Assign Tables</a></li>
+            <li class="nav-item"><a class="nav-link" role="tab" data-toggle="tab" href="#EditMenuItems" id="EditMenuItems-tab">Edit Menu Items</a></li>
+            <li class="nav-item"><a class="nav-link" role="tab" data-toggle="tab" href="#WeeklySales" id="WeeklySales-tab">View Weekly Sales</a></li>
+        </ul>
+        <div class="tab-content" style="height: 95%;width: 100%;">
+            <div class="tab-pane active" role="tabpanel" id="Index" style="height: 100%;width: 100%;margin: 0px;padding: 0px;">
+                <div class="d-flex" style="width: 100%;">
+                    <div class="col text-center d-inline-flex flex-column justify-content-start align-items-stretch align-content-stretch TableCol" style="padding: 0px;">
+                        <div style="width: 100%;position: relative;"><button class="btn btn-primary btn-lg border rounded shadow-lg d-block flex-grow-1" type="button" id="Table1" style="width: 100%;height: 23.7vh;padding: 0px;background-color: rgb(243,255,222);color: rgb(0,0,0);"><strong id="TableLabel1" class="TableLabel">Table 1</strong></button>
+                            <div
+                                class="btn-group TblStatusInd" role="group" id="Tbl1StatusInd" style="height: 5.556vh;width: 9.896vw;"><button class="btn btn-primary paymentIndicator" type="button" style="width: 50%;">Button 1</button><button class="btn btn-primary helpIndicator" type="button" style="width: 50%;">Button 2</button></div>
+                    </div>
+                    <div style="width: 100%;position: relative;"><button class="btn btn-primary btn-lg border rounded shadow-lg d-block flex-grow-1" type="button" id="Table2" style="width: 100%;height: 23.7vh;padding: 0px;background-color: rgb(243,255,222);color: rgb(0,0,0);"><strong id="TableLabel2" class="TableLabel">Table 2</strong></button>
+                        <div
+                            class="btn-group TblStatusInd" role="group" id="Tbl2StatusInd" style="height: 5.556vh;width: 9.896vw;"><button class="btn btn-primary paymentIndicator" type="button" style="width: 50%;">Button 1</button><button class="btn btn-primary helpIndicator" type="button" style="width: 50%;">Button 2</button></div>
+                </div>
+                <div style="width: 100%;position: relative;"><button class="btn btn-primary btn-lg border rounded shadow-lg d-block flex-grow-1" type="button" id="Table3" style="width: 100%;height: 23.7vh;padding: 0px;background-color: rgb(243,255,222);color: rgb(0,0,0);"><strong id="TableLabel3" class="TableLabel">Table 3</strong></button>
+                    <div
+                        class="btn-group TblStatusInd" role="group" id="Tbl3StatusInd" style="height: 5.556vh;width: 9.896vw;"><button class="btn btn-primary paymentIndicator" type="button" style="width: 50%;">Button 1</button><button class="btn btn-primary helpIndicator" type="button" style="width: 50%;">Button 2</button></div>
+            </div>
+            <div style="width: 100%;position: relative;"><button class="btn btn-primary btn-lg border rounded shadow-lg d-block flex-grow-1" type="button" id="Table4" style="width: 100%;height: 23.7vh;padding: 0px;background-color: rgb(243,255,222);color: rgb(0,0,0);"><strong id="TableLabel4" class="TableLabel">Table 4</strong></button>
+                <div
+                    class="btn-group TblStatusInd" role="group" id="Tbl4StatusInd" style="height: 5.556vh;width: 9.896vw;"><button class="btn btn-primary paymentIndicator" type="button" style="width: 50%;">Button 1</button><button class="btn btn-primary helpIndicator" type="button" style="width: 50%;">Button 2</button></div>
+        </div>
+    </div>
+    <div class="col text-center d-inline-flex flex-column justify-content-start align-items-stretch align-content-stretch TableCol" style="padding: 0px;">
+        <div style="width: 100%;position: relative;"><button class="btn btn-primary btn-lg border rounded shadow-lg d-block flex-grow-1" type="button" id="Table5" style="width: 100%;height: 23.7vh;padding: 0px;background-color: rgb(243,255,222);color: rgb(0,0,0);"><strong id="TableLabel5" class="TableLabel">Table 5</strong></button>
+            <div
+                class="btn-group TblStatusInd" role="group" id="Tbl5StatusInd" style="height: 5.556vh;width: 9.896vw;"><button class="btn btn-primary paymentIndicator" type="button" style="width: 50%;">Button 1</button><button class="btn btn-primary helpIndicator" type="button" style="width: 50%;">Button 2</button></div>
+    </div>
+    <div style="width: 100%;position: relative;"><button class="btn btn-primary btn-lg border rounded shadow-lg d-block flex-grow-1" type="button" id="Table6" style="width: 100%;height: 23.7vh;padding: 0px;background-color: rgb(243,255,222);color: rgb(0,0,0);"><strong id="TableLabel6" class="TableLabel">Table 6</strong></button>
+        <div
+            class="btn-group TblStatusInd" role="group" id="Tbl6StatusInd" style="height: 5.556vh;width: 9.896vw;"><button class="btn btn-primary paymentIndicator" type="button" style="width: 50%;">Button 1</button><button class="btn btn-primary helpIndicator" type="button" style="width: 50%;">Button 2</button></div>
+    </div>
+    <div style="width: 100%;position: relative;"><button class="btn btn-primary btn-lg border rounded shadow-lg d-block flex-grow-1" type="button" id="Table7" style="width: 100%;height: 23.7vh;padding: 0px;background-color: rgb(243,255,222);color: rgb(0,0,0);"><strong id="TableLabel7" class="TableLabel">Table 7</strong></button>
+        <div
+            class="btn-group TblStatusInd" role="group" id="Tbl7StatusInd" style="height: 5.556vh;width: 9.896vw;"><button class="btn btn-primary paymentIndicator" type="button" style="width: 50%;">Button 1</button><button class="btn btn-primary helpIndicator" type="button" style="width: 50%;">Button 2</button></div>
+    </div>
+    <div style="width: 100%;position: relative;"><button class="btn btn-primary btn-lg border rounded shadow-lg d-block flex-grow-1" type="button" id="Table8" style="width: 100%;height: 23.7vh;padding: 0px;background-color: rgb(243,255,222);color: rgb(0,0,0);"><strong id="TableLabel8" class="TableLabel">Table 8</strong></button>
+        <div
+            class="btn-group TblStatusInd" role="group" id="Tbl8StatusInd" style="height: 5.556vh;width: 9.896vw;"><button class="btn btn-primary paymentIndicator" type="button" style="width: 50%;">Button 1</button><button class="btn btn-primary helpIndicator" type="button" style="width: 50%;">Button 2</button></div>
+    </div>
+    </div>
+    <div class="col text-center d-inline-flex flex-column justify-content-start align-items-stretch align-content-stretch TableCol" style="padding: 0px;">
+        <div style="width: 100%;position: relative;"><button class="btn btn-primary btn-lg border rounded shadow-lg d-block flex-grow-1" type="button" id="Table9" style="width: 100%;height: 23.7vh;padding: 0px;background-color: rgb(255,215,242);color: rgb(0,0,0);"><strong id="TableLabel9" class="TableLabel">Table 9</strong></button>
+            <div
+                class="btn-group TblStatusInd" role="group" id="Tbl9StatusInd" style="height: 5.556vh;width: 9.896vw;"><button class="btn btn-primary paymentIndicator" type="button" style="width: 50%;">Button 1</button><button class="btn btn-primary helpIndicator" type="button" style="width: 50%;">Button 2</button></div>
+    </div>
+    <div style="width: 100%;position: relative;"><button class="btn btn-primary btn-lg border rounded shadow-lg d-block flex-grow-1" type="button" id="Table10" style="width: 100%;height: 23.7vh;padding: 0px;background-color: rgb(255,215,242);color: rgb(0,0,0);"><strong id="TableLabel10" class="TableLabel">Table 10</strong></button>
+        <div
+            class="btn-group TblStatusInd" role="group" id="Tbl10StatusInd" style="height: 5.556vh;width: 9.896vw;"><button class="btn btn-primary paymentIndicator" type="button" style="width: 50%;">Button 1</button><button class="btn btn-primary helpIndicator" type="button" style="width: 50%;">Button 2</button></div>
+    </div>
+    <div style="width: 100%;position: relative;"><button class="btn btn-primary btn-lg border rounded shadow-lg d-block flex-grow-1" type="button" id="Table11" style="width: 100%;height: 23.7vh;padding: 0px;background-color: rgb(255,215,242);color: rgb(0,0,0);"><strong id="TableLabel11" class="TableLabel">Table 11</strong></button>
+        <div
+            class="btn-group TblStatusInd" role="group" id="Tbl11StatusInd" style="height: 5.556vh;width: 9.896vw;"><button class="btn btn-primary paymentIndicator" type="button" style="width: 50%;">Button 1</button><button class="btn btn-primary helpIndicator" type="button" style="width: 50%;">Button 2</button></div>
+    </div>
+    <div style="width: 100%;position: relative;"><button class="btn btn-primary btn-lg border rounded shadow-lg d-block flex-grow-1" type="button" id="Table12" style="width: 100%;height: 23.7vh;padding: 0px;background-color: rgb(255,215,242);color: rgb(0,0,0);"><strong id="TableLabel12" class="TableLabel">Table 12</strong></button>
+        <div
+            class="btn-group TblStatusInd" role="group" id="Tbl12StatusInd" style="height: 5.556vh;width: 9.896vw;"><button class="btn btn-primary paymentIndicator" type="button" style="width: 50%;">Button 1</button><button class="btn btn-primary helpIndicator" type="button" style="width: 50%;">Button 2</button></div>
+    </div>
+    </div>
+    <div class="col text-center d-inline-flex flex-column justify-content-start align-items-stretch align-content-stretch TableCol" style="padding: 0px;">
+        <div style="width: 100%;position: relative;"><button class="btn btn-primary btn-lg border rounded shadow-lg d-block flex-grow-1" type="button" id="Table13" style="width: 100%;height: 23.7vh;padding: 0px;background-color: rgb(255,215,242);color: rgb(0,0,0);"><strong id="TableLabel13" class="TableLabel">Table 13</strong></button>
+            <div
+                class="btn-group TblStatusInd" role="group" id="Tbl13StatusInd" style="height: 5.556vh;width: 9.896vw;"><button class="btn btn-primary paymentIndicator" type="button" style="width: 50%;">Button 1</button><button class="btn btn-primary helpIndicator" type="button" style="width: 50%;">Button 2</button></div>
+    </div>
+    <div style="width: 100%;position: relative;"><button class="btn btn-primary btn-lg border rounded shadow-lg d-block flex-grow-1" type="button" id="Table14" style="width: 100%;height: 23.7vh;padding: 0px;background-color: rgb(255,215,242);color: rgb(0,0,0);"><strong id="TableLabel14" class="TableLabel">Table 14</strong></button>
+        <div
+            class="btn-group TblStatusInd" role="group" id="Tbl14StatusInd" style="height: 5.556vh;width: 9.896vw;"><button class="btn btn-primary paymentIndicator" type="button" style="width: 50%;">Button 1</button><button class="btn btn-primary helpIndicator" type="button" style="width: 50%;">Button 2</button></div>
+    </div>
+    <div style="width: 100%;position: relative;"><button class="btn btn-primary btn-lg border rounded shadow-lg d-block flex-grow-1" type="button" id="Table15" style="width: 100%;height: 23.7vh;padding: 0px;background-color: rgb(255,215,242);color: rgb(0,0,0);"><strong id="TableLabel15" class="TableLabel">Table 15</strong></button>
+        <div
+            class="btn-group TblStatusInd" role="group" id="Tbl15StatusInd" style="height: 5.556vh;width: 9.896vw;"><button class="btn btn-primary paymentIndicator" type="button" style="width: 50%;">Button 1</button><button class="btn btn-primary helpIndicator" type="button" style="width: 50%;">Button 2</button></div>
+    </div>
+    <div style="width: 100%;position: relative;"><button class="btn btn-primary btn-lg border rounded shadow-lg d-block flex-grow-1" type="button" id="Table16" style="width: 100%;height: 23.7vh;padding: 0px;background-color: rgb(255,215,242);color: rgb(0,0,0);"><strong id="TableLabel16" class="TableLabel">Table 16</strong></button>
+        <div
+            class="btn-group TblStatusInd" role="group" id="Tbl16StatusInd" style="height: 5.556vh;width: 9.896vw;"><button class="btn btn-primary paymentIndicator" type="button" style="width: 50%;">Button 1</button><button class="btn btn-primary helpIndicator" type="button" style="width: 50%;">Button 2</button></div>
+    </div>
+    </div>
+    <div class="col text-center d-inline-flex flex-column justify-content-start align-items-stretch align-content-stretch TableCol" style="padding: 0px;">
+        <div style="width: 100%;position: relative;"><button class="btn btn-primary btn-lg border rounded shadow-lg d-block flex-grow-1" type="button" id="Table17" style="width: 100%;height: 23.7vh;padding: 0px;background-color: rgb(215,243,255);color: rgb(0,0,0);"><strong id="TableLabel17" class="TableLabel">Table 17</strong></button>
+            <div
+                class="btn-group TblStatusInd" role="group" id="Tbl17StatusInd" style="height: 5.556vh;width: 9.896vw;"><button class="btn btn-primary paymentIndicator" type="button" style="width: 50%;">Button 1</button><button class="btn btn-primary helpIndicator" type="button" style="width: 50%;">Button 2</button></div>
+    </div>
+    <div style="width: 100%;position: relative;"><button class="btn btn-primary btn-lg border rounded shadow-lg d-block flex-grow-1" type="button" id="Table18" style="width: 100%;height: 23.7vh;padding: 0px;background-color: rgb(215,243,255);color: rgb(0,0,0);"><strong id="TableLabel18" class="TableLabel">Table 18</strong></button>
+        <div
+            class="btn-group TblStatusInd" role="group" id="Tbl18StatusInd" style="height: 5.556vh;width: 9.896vw;"><button class="btn btn-primary paymentIndicator" type="button" style="width: 50%;">Button 1</button><button class="btn btn-primary helpIndicator" type="button" style="width: 50%;">Button 2</button></div>
+    </div>
+    <div style="width: 100%;position: relative;"><button class="btn btn-primary btn-lg border rounded shadow-lg d-block flex-grow-1" type="button" id="Table19" style="width: 100%;height: 23.7vh;padding: 0px;background-color: rgb(215,243,255);color: rgb(0,0,0);"><strong id="TableLabel19" class="TableLabel">Table 19</strong></button>
+        <div
+            class="btn-group TblStatusInd" role="group" id="Tbl19StatusInd" style="height: 5.556vh;width: 9.896vw;"><button class="btn btn-primary paymentIndicator" type="button" style="width: 50%;">Button 1</button><button class="btn btn-primary helpIndicator" type="button" style="width: 50%;">Button 2</button></div>
+    </div>
+    <div style="width: 100%;position: relative;"><button class="btn btn-primary btn-lg border rounded shadow-lg d-block flex-grow-1" type="button" id="Table20" style="width: 100%;height: 23.7vh;padding: 0px;background-color: rgb(215,243,255);color: rgb(0,0,0);"><strong id="TableLabel20" class="TableLabel">Table 20</strong></button>
+        <div
+            class="btn-group TblStatusInd" role="group" id="Tbl20StatusInd" style="height: 5.556vh;width: 9.896vw;"><button class="btn btn-primary paymentIndicator" type="button" style="width: 50%;">Button 1</button><button class="btn btn-primary helpIndicator" type="button" style="width: 50%;">Button 2</button></div>
+    </div>
+    </div>
+    <div class="col text-center d-inline-flex flex-column justify-content-start align-items-stretch align-content-stretch TableCol" style="padding: 0px;">
+        <div style="width: 100%;position: relative;"><button class="btn btn-primary btn-lg border rounded shadow-lg d-block flex-grow-1" type="button" id="Table21" style="width: 100%;height: 23.7vh;padding: 0px;background-color: rgb(215,243,255);color: rgb(0,0,0);"><strong id="TableLabel21" class="TableLabel">Table 21</strong></button>
+            <div
+                class="btn-group TblStatusInd" role="group" id="Tbl21StatusInd" style="height: 5.556vh;width: 9.896vw;"><button class="btn btn-primary paymentIndicator" type="button" style="width: 50%;">Button 1</button><button class="btn btn-primary helpIndicator" type="button" style="width: 50%;">Button 2</button></div>
+    </div>
+    <div style="width: 100%;position: relative;"><button class="btn btn-primary btn-lg border rounded shadow-lg d-block flex-grow-1" type="button" id="Table22" style="width: 100%;height: 23.7vh;padding: 0px;background-color: rgb(215,243,255);color: rgb(0,0,0);"><strong id="TableLabel22" class="TableLabel">Table 22</strong></button>
+        <div
+            class="btn-group TblStatusInd" role="group" id="Tbl22StatusInd" style="height: 5.556vh;width: 9.896vw;"><button class="btn btn-primary paymentIndicator" type="button" style="width: 50%;">Button 1</button><button class="btn btn-primary helpIndicator" type="button" style="width: 50%;">Button 2</button></div>
+    </div>
+    <div style="width: 100%;position: relative;"><button class="btn btn-primary btn-lg border rounded shadow-lg d-block flex-grow-1" type="button" id="Table23" style="width: 100%;height: 23.7vh;padding: 0px;background-color: rgb(215,243,255);color: rgb(0,0,0);"><strong id="TableLabel23" class="TableLabel">Table 23</strong></button>
+        <div
+            class="btn-group TblStatusInd" role="group" id="Tbl23StatusInd" style="height: 5.556vh;width: 9.896vw;"><button class="btn btn-primary paymentIndicator" type="button" style="width: 50%;">Button 1</button><button class="btn btn-primary helpIndicator" type="button" style="width: 50%;">Button 2</button></div>
+    </div>
+    <div style="width: 100%;position: relative;"><button class="btn btn-primary btn-lg border rounded shadow-lg d-block flex-grow-1" type="button" id="Table24" style="width: 100%;height: 23.7vh;padding: 0px;background-color: rgb(215,243,255);color: rgb(0,0,0);"><strong id="TableLabel24" class="TableLabel">Table 24</strong></button>
+        <div
+            class="btn-group TblStatusInd" role="group" id="Tbl24StatusInd" style="height: 5.556vh;width: 9.896vw;"><button class="btn btn-primary paymentIndicator" type="button" style="width: 50%;">Button 1</button><button class="btn btn-primary helpIndicator" type="button" style="width: 50%;">Button 2</button></div>
+    </div>
+    </div>
+    <div class="col-3 text-center d-inline-flex flex-column flex-fill justify-content-center align-items-stretch align-content-stretch align-self-start InfoCol" style="padding: 0px;"><strong style="color: rgb(255,255,255);font-size: 61px;">Daily Sales:</strong><span style="color: rgb(255,255,255);font-size: 54px;">$5,364.42</span></div>
+    </div>
+    </div>
+            <div class="tab-pane" role="tabpanel" id="AssignTables">
+                <div class="d-flex" style="width: 100%;">
+                    <div class="col text-center d-inline-flex flex-column justify-content-start align-items-stretch align-content-stretch TableCol" style="padding: 0px;">
+                        <div style="width: 100%;position: relative;"><button class="btn btn-primary btn-lg border rounded shadow-lg d-block flex-grow-1 sectionButton assignButton" type="button" style="width: 100%;height: 95vh;padding: 0px;background-color: rgb(243,255,222);color: rgb(0,0,0);"><strong id="SectionLabel1" style="font-size: 45px;">Section 1</strong></button></div>
+                    </div>
+                    <div class="col text-center d-inline-flex flex-column justify-content-start align-items-stretch align-content-stretch TableCol" style="padding: 0px;">
+                        <div style="width: 100%;position: relative;"><button class="btn btn-primary btn-lg border rounded shadow-lg d-block flex-grow-1 sectionButton assignButton" type="button" style="width: 100%;height: 95vh;padding: 0px;background-color: rgb(255,215,242);color: rgb(0,0,0);"><strong id="SectionLabel2" style="font-size: 45px;">Section 2</strong></button></div>
+                    </div>
+                    <div class="col text-center d-inline-flex flex-column justify-content-start align-items-stretch align-content-stretch TableCol" style="padding: 0px;">
+                        <div style="width: 100%;position: relative;"><button class="btn btn-primary btn-lg border rounded shadow-lg d-block flex-grow-1 sectionButton assignButton" type="button" style="width: 100%;height: 95vh;padding: 0px;background-color: rgb(215,243,255);color: rgb(0,0,0);"><strong id="SectionLabel3" style="font-size: 45px;">Section 3</strong></button></div>
+                    </div>
+                    <div class="col-3 text-center d-inline-flex flex-column flex-fill justify-content-center align-items-stretch align-content-stretch align-self-start InfoCol" style="padding: 0px;"><strong style="color: rgb(255,255,255);font-size: 61px;">Waiters:</strong><button class="btn btn-primary btn-lg border rounded shadow-lg d-block flex-grow-1 align-self-center svrButton assignButton" type="button" style="width: 66%;/*position: relative;*//*top: 100px;*/height: 10%;padding: 0px;background-color: #827566;color: rgb(0,0,0);margin: 5vh;"><strong id="SvrLabel1" style="font-size: 45px;">Server 1</strong></button>
+                        <button
+                            class="btn btn-primary btn-lg border rounded shadow-lg d-block flex-grow-1 align-self-center svrButton assignButton" type="button" style="width: 66%;/*position: relative;*//*top: 100px;*/height: 10%;padding: 0px;background-color: #827566;color: rgb(0,0,0);margin: 5vh;"><strong id="SvrLabel2" style="font-size: 45px;">Server 2</strong></button><button class="btn btn-primary btn-lg border rounded shadow-lg d-block flex-grow-1 align-self-center svrButton assignButton" type="button" style="width: 66%;/*position: relative;*//*top: 100px;*/height: 10%;padding: 0px;background-color: #827566;color: rgb(0,0,0);margin: 5vh;"><strong id="SvrLabel3" style="font-size: 45px;">Server 3</strong></button>
+                            <button
+                                class="btn btn-primary btn-lg border rounded shadow-lg d-block flex-grow-1 align-self-center confirmButton" type="button" style="width: 33%;/*position: relative;*//*top: 100px;*/height: 8%;padding: 0px;background-color: #cce2dd;color: rgb(0,0,0);margin: 5vh;"><strong style="font-size: 34px;">Confirm</strong></button>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane" role="tabpanel" id="EditMenuItems">
+                <div class="d-flex">
+                    <div class="d-xl-flex" id="FoodTypeTabs" style="height: 95vh;">
+                        <ul class="nav nav-pills nav-fill d-flex flex-column" style="width: 33.333vw;">
+                            <li class="nav-item d-xl-flex" style="height: 19vh;background-color: #515151;"><a class="nav-link active text-center d-xl-flex justify-content-xl-center align-items-xl-center" role="tab" data-toggle="pill" href="#AppetizerTab" id="appetizer-tab" style="height: 19vh;padding: 0px;width: 100%;font-size: 50px;">Appetizers</a></li>
+                            <li
+                                class="nav-item d-xl-flex" style="height: 19vh;background-color: #515151;"><a class="nav-link text-center d-xl-flex justify-content-xl-center align-items-xl-center" role="tab" data-toggle="pill" href="#EntreeTab" id="entree-tab" style="height: 19vh;padding: 0px;width: 100%;font-size: 50px;">Entrees</a></li>
+                                <li
+                                    class="nav-item d-xl-flex" style="height: 19vh;background-color: #515151;"><a class="nav-link text-center d-xl-flex justify-content-xl-center align-items-xl-center" role="tab" data-toggle="pill" href="#DessertTab" id="dessert-tab" style="height: 19vh;padding: 0px;width: 100%;font-size: 50px;">Desserts</a></li>
+                                    <li
+                                        class="nav-item d-xl-flex" style="height: 19vh;background-color: #515151;"><a class="nav-link text-center d-xl-flex justify-content-xl-center align-items-xl-center" role="tab" data-toggle="pill" href="#DrinkTab" id="drink-tab" style="height: 19vh;padding: 0px;width: 100%;font-size: 50px;">Drinks</a></li>
+                                        <li
+                                            class="nav-item d-xl-flex" style="height: 19vh;background-color: #515151;"><a class="nav-link text-center d-xl-flex justify-content-xl-center align-items-xl-center" role="tab" data-toggle="pill" href="#KidsTab" id="kids-tab" style="height: 19vh;padding: 0px;width: 100%;font-size: 50px;">Kids</a></li>
+                        </ul>
+                        <div class="tab-content" style="width: 66.666vw;">
+                            <div class="tab-pane active" role="tabpanel" id="AppetizerTab">
+                                <div>
+                                    <div class="d-xl-flex" id="food-tabs" style="height: 95vh;">
+                                        <ul class="nav nav-pills nav-justified d-flex flex-column foodItemTabs" style="width: 50%;">
+                                            <li class="nav-item d-xl-flex" style="background-color: #515151;"><a class="nav-link active text-center d-xl-flex justify-content-xl-center align-items-xl-center" role="tab" data-toggle="pill" href="#GrilledParrotTab" id="grilledParrot-tab" style="height: 100%;padding: 0px;width: 100%;">Grilled Parrot</a></li>
+                                        </ul>
+                                        <div class="tab-content foodItemPanes" style="width: 50%;">
+                                            <div class="tab-pane active" role="tabpanel" id="GrilledParrotTab" style="height: 100%;">
+                                                <div class="d-flex flex-column" style="height: 100%;background-color: rgba(241,242,240,0.6);">
+                                                    <div class="row flex-fill" style="margin: 0px;">
+                                                        <div class="col d-flex flex-column justify-content-center align-items-center"><button class="btn btn-primary availButton" type="button" id="available" style="width: 50%;height: 50%;">Available</button></div>
+                                                    </div>
+                                                    <div class="row flex-fill" style="margin: 0px;">
+                                                        <div class="col d-flex justify-content-center align-items-center"><button class="btn btn-primary availButton" type="button" id="NOTavailable" style="width: 50%;height: 50%;background-color: rgb(81,81,81);color: rgb(137,137,137);">Not Available</button></div>
+                                                    </div>
+                                                    <div class="row flex-fill" style="margin: 0px;">
+                                                        <div class="col"></div>
+                                                        <div class="col d-flex justify-content-center align-items-center"><button class="btn btn-primary" type="submit" id="confirm" style="width: 50%;height: 25%;background-color: rgb(28,60,95);color: #c2d0cd;">Confirm</button></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane" role="tabpanel" id="EntreeTab">
+                                <div>
+                                    <div class="d-xl-flex" id="food-tabs" style="height: 95vh;">
+                                        <ul class="nav nav-pills nav-justified d-flex flex-column foodItemTabs" style="width: 50%;"></ul>
+                                        <div class="tab-content foodItemPanes" style="width: 50%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane" role="tabpanel" id="DessertTab">
+                                <div>
+                                    <div class="d-xl-flex" id="food-tabs" style="height: 95vh;">
+                                        <ul class="nav nav-pills nav-justified d-flex flex-column foodItemTabs" style="width: 50%;"></ul>
+                                        <div class="tab-content foodItemPanes" style="width: 50%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane" role="tabpanel" id="DrinkTab">
+                                <div>
+                                    <div class="d-xl-flex" id="food-tabs" style="height: 95vh;">
+                                        <ul class="nav nav-pills nav-justified d-flex flex-column foodItemTabs" style="width: 50%;"></ul>
+                                        <div class="tab-content foodItemPanes" style="width: 50%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane" role="tabpanel" id="KidsTab">
+                                <div>
+                                    <div class="d-xl-flex" id="food-tabs" style="height: 95vh;">
+                                        <ul class="nav nav-pills nav-justified d-flex flex-column foodItemTabs" style="width: 50%;"></ul>
+                                        <div class="tab-content foodItemPanes" style="width: 50%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane" role="tabpanel" id="WeeklySales" style="height: 100%;width: 100%;">
+                <div class="container-fluid" style="width: 100%;margin: 0px;padding: 0px;height: 100%;">
+                    <div class="row justify-content-end" id="infoRow" style="margin: 0px;height: 17%;">
+                        <div class="col-6 text-center d-inline-flex flex-column flex-fill justify-content-center align-items-stretch align-content-stretch align-self-start InfoCol" style="padding: 0px;"><strong style="color: rgb(255,255,255);font-size: 3vw;">Daily Gratuity:</strong><span style="color: rgb(255,255,255);font-size: 3vw;">$1,060.00</span></div>
+                    </div>
+                    <div class="row" id="chartRow" style="margin: 0px;height: 83%;width: 100%;">
+                        <div class="col-6" id="SalesChartCol" style="padding: 0px;">
+                            <div id="salesChart" style="width: 99%;height: 99%;"></div>
+                        </div>
+                        <div class="col-6" id="GratuityChartCol" style="padding: 0px;">
+                            <div id="gratChart" style="width: 99%;height: 99%;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col"></div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="../routes/ManagerDash/TipsChart.js"></script>
+    <script src="../routes/ManagerDash/editMenuItems.js"></script>
+    <script src="../routes/ManagerDash/statusIndicators.js"></script>
+    <script src="../routes/ManagerDash/assignTables.js"></script>
+</body>
+
+</html>

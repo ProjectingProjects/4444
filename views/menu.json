@@ -1,0 +1,9 @@
+{"menu":{
+	{"food": "pancakes",
+	"cost": "$15.00",
+	"description": "fluffy"}
+	{"food": "eggs",
+	"cost": "$7.00",
+	"description": "scrambled"}
+	}
+}

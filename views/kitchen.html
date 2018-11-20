@@ -1,0 +1,153 @@
+<!-- KITCHEN QUEUE PAGE -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+
+<!-- IE use the latest rendering engine -->
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="description" content="Kitchen Queue Page">
+<meta name="author" content="Kevin Morales">
+
+<!-- Set the page to the width of the device and set the zoom level -->
+<meta name="viewport" content="width = device-width, initial-scale = 1">
+<title>Kitchen Queue</title>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="kitchen.css">
+
+<script src="/socket.io/socket.io.js"></script>
+
+<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script src="https://unpkg.com/popper.js/dist/umd/popper.min.js"></script>
+
+<script>
+	$(document).ready(function() {
+		
+		var kitchSock = io({transports: ['websocket']});
+
+
+		var i = 0;
+
+		$(".ready").attr('disabled', 'disabled');
+
+		//prepare button
+		$("tbody").on("click", "button.prepare", function() {
+
+			var pc = this.classList;
+			var rl = "."+pc[3];
+			console.log(rl);			
+
+			console.log("preparing...");
+			//disable specific prepare button
+			$(this).attr('disabled', 'disabled');
+			var parentobj = $(this).parent().parent();
+
+			var cname = $(parentobj).attr('id');
+			cname = cname.slice(0, -2);
+			console.log(cname);
+
+			// Emitting
+			kitchSock.emit('foodPrepOrder', cname);
+			//enable ready button
+			$(".ready" + rl).removeAttr('disabled');
+		});
+
+		$("tbody").on("click", "button.ready", function() {
+
+			var parentobj = $(this).parent().parent();
+			console.log(parentobj);
+			var cname = $(parentobj).attr('id');
+			$(parentobj).remove();
+			//delete cookie
+			console.log(cname);
+			var order = cname.slice(0, -2);
+			console.log(order + "   " + cname);
+			kitchSock.emit('foodReadyOrder', order);
+			document.cookie = "element"+ cname + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+		});
+
+		var foodData;
+		var orderNum;
+		//grab data for new food items
+		kitchSock.on('kitchenOrderNum', function(order) {
+			orderNum = order;
+			console.log("Order Num: " + orderNum);		
+		});
+
+		kitchSock.on('orderItem', function(arr) {
+			foodData = arr;
+			
+			//Create DOM Elements for new food items
+			var item = "<tr id= \""+ orderNum + "_" + i +"\"><th scope=\"row\">"+ orderNum + "</th><td>" + foodData.menuItem + 
+			"</td><td>" + foodData.mods + 
+			"</td><td><button type=\"button\" class=\"btn btn-warning prepare food" 
+			+ i + "\">Prepare</button></td><td><button type=\"button\" class=\"btn btn-success ready food" + i + "\">Ready</button></td>";	
+			console.log(item);
+			$("tbody").append(item);
+
+			$(".ready").attr('disabled', 'disabled');
+                
+			var d = new Date();
+                        d.setTime(d.getTime()+(7*24*60*60*1000));
+                        var expires = "expires="+d.toUTCString();       
+
+                        document.cookie = "element" +orderNum+ "_" +i+ "=" + item + ";" + expires + ";path=/";
+                        
+			var ck = document.cookie;		
+	
+			console.log(ck);			
+			i++;
+		});
+
+		kitchSock.on('sendComp', function(comp) {
+		
+			console.log(comp);
+
+			//send compliment as HTML DOM
+			var complimentEl = "<div class=\"container flex-container complimentBox\">Table "+comp[0]+" says: "+comp[1]+"</div>";
+			$(".comp").empty();
+			$(".comp").append(complimentEl);
+
+		});
+
+	
+		//check for dynamically created DOMS
+		$.each(document.cookie.split(/; */), function() {
+			console.log(this);
+			$("tbody").append(this);
+		});
+
+		$(".ready").attr('disabled', 'disabled');
+		
+	});
+</script>
+</head>
+
+<body>
+<div class = "container">
+<h2>Kitchen Queue</h2>
+<table class="table table-striped table-bordered">
+  <thead>
+    <tr>
+      <th style="width:6%">Order</th>
+      <th style="width:16%">Menu Item</th>
+      <th style="width:48%">Ingredients</th>
+      <th style="width:6%">Prepare</th>
+      <th style="width:6%">Ready</th>
+
+    </tr>
+  </thead>
+  <tbody>
+  </tbody>
+</table>
+</div>
+<footer class="footer">
+		<div class="container">
+			<div class="row comp">
+				<!-- COMPLIMENTS GO HERE!!-->
+			</div>
+		</div>
+</footer>
+</body>
+</html>

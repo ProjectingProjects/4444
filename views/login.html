@@ -1,0 +1,61 @@
+<!-- LOGIN PAGE -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+
+<!-- IE use the latest rendering engine -->
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<!-- Set the page to the width of the device and set the zoom level -->
+<meta name="viewport" content="width = device-width, initial-scale = 1">
+<title>Server Login</title>
+
+<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script src="https://unpkg.com/popper.js/dist/umd/popper.min.js"></script>
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+<link rel="stylesheet" type="text/css" href="login.css">
+
+</head>
+
+<body>
+
+  <!-- Login Form -->
+  <div class="modal-dialog text-center">
+      <div class="col-sm-8 main-section">
+          <div class="modal-content">
+
+            <form action="http://45.56.67.103:80/login" method="POST" class="col-12">
+	      <!-- User Name -->
+              <div class="form-group userID">
+                  <input type="text" class="form-control" name="userID" placeholder="User ID">
+              </div>
+              <!--<div class="form-group pw">
+                  <input type="password" class="form-control" placeholder="Password">
+              </div>-->
+
+              <button type="submit" class="btn login-btn">Login</button>
+            </form>
+
+            <!--forgot password
+            <div class="col-12 forgot">
+              <a href="#">Forgot Password?</a>
+            </div>-->
+
+          </div> <!--- End of Modal Content --->
+      </div>
+  </div>
+
+  <script>
+    $("button.login-btn").on("click", function(){
+      var userID = $(".userID input").val();
+      console.log("userIDTEST="+userID);
+      var d = new Date();
+      d.setTime(d.getTime()+(1*24*60*60*1000));
+      var expires = "expires="+d.toUTCString();       
+      document.cookie = "svrID=" + userID + ";" + expires + ";path=/";
+    });
+  </script>
+  </body>
+  </html>

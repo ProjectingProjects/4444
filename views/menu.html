@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+
+<!-- If IE use the latest rendering engine -->
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<!-- Set the page to the width of the device and set the zoom level -->
+<meta name="viewport" content="width = device-width, initial-scale = 1">
+<title>Treasure Island</title>
+
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script src="https://unpkg.com/popper.js/dist/umd/popper.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+<link href="https://fonts.googleapis.com/css?family=Courgette" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="menu.css">
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+
+<script>
+$(document).ready(function(){
+
+	//grab JSON file with menu data
+	$.ajax({
+		async: false,
+		dataType: "json",
+		url: "../routes/menu.json",
+		success: function(data){
+
+			var ind2 = 0;			
+
+			$(data.menu).each(function(index, value){
+			
+			if(value.avail == 1)
+			{
+				//create containers for food items
+				var item="<div class=\"item\"><div id=\""+(index+1)+"\" class=\"name\">"+value.name+
+				"</div><div class=\"price\">"+value.price+"</div>"+
+				"<div class=\"descrip\">"+value.descrip+"</div>"+
+				"</div></div><div><p class=\"calories c"+(index+1)+"\">"+value.calories+
+				"</p><button class=\"btn btn-primary calButt c"+(index+1)+"\">Show Calories</button></div>";
+		
+				var ing = 1;
+
+				var modify = "<div class=\"mod"+(index+1)+"\" style=\"display: none;\">";
+
+				for (var i = 1; i <= 5; i++)
+				{
+					var ing_name = "ing"+i;
+					if (value[ing_name] != null)
+					{
+						modify = modify + "<button id=\"no"+i+"\" class=\"btn btn-primary\">No " + value[ing_name] + "</button>";
+						modify = modify + "<button id=\"xt"+i+"\" class=\"btn btn-primary\">Extra " + value[ing_name] + "</button>";
+					}	
+				}
+
+				modify = modify + "</div>";
+
+				//get id
+				var cat = "#" + value.category;
+	
+				$(cat).append(item);
+				$(".modify-Food").prepend(modify);
+	                        
+				ing++;
+			}// end if	
+			});			
+
+
+		}	
+	});
+	
+	 var orderCookies = Cookies.get('order');
+                        
+         if(orderCookies != undefined)
+		$(".refill").css('display', 'block');	
+
+
+	//for individual calorie buttons
+	$(".calButt").each(function(){
+			
+		$(this).on("click", function(){
+			
+			//get specific button calorie class
+			var mc = this.classList;
+	
+			var cl = "."+mc[3];	
+			
+			//get p element
+			var a = $("p.calories"+cl);
+			a.toggle();
+
+			//get button element
+			var calButton = $("button.btn.btn-primary.calButt"+cl);
+			
+			//toggle and change text
+			if (a.is(":visible"))
+				calButton.text("Hide Calories");	
+			else
+				calButton.text("Show Calories");
+		});
+	});
+
+	//for show all calories button
+	$(".allCalories").on("click", function() {
+		
+		//show all calorie elements
+		$(".calories").show();
+
+		//set all calButts to hide text
+		$(".calButt").text("Hide Calories");
+	})
+
+	var socket = io({transports: ['websocket']});
+	var cookie = Cookies.get('table');
+	if(cookie == null)
+	{
+		socket.emit('arrival', {message: 'Customer arrived'});
+		//socket.on();
+		//socket.emit('table', {message: 'No cookie set'});
+
+		socket.on('table', function(table) {
+			console.log("Connected");
+			console.log("Table: " + table);
+			socket.emit('tableAck', { message: 'This is table ' + table + ' reporting for duty!'});
+	
+			// Cookie for the table number
+			var d = new Date();
+			d.setTime(d.getTime()+(7*24*60*60*1000));
+			var expires = "expires="+d.toUTCString();	
+
+			document.cookie = "table=" + table + ";" + expires + ";path=/";
+			
+			var x = document.cookie;
+			console.log(x);
+		});
+
+		socket.on('waiter', function(waiter) {
+			console.log("Waiter: " + waiter);
+		});
+	}
+	else
+	{
+		console.log(Cookies.get());
+		var tableNum = Cookies.get('table');
+		console.log("Saved table: " + tableNum);
+		socket.emit('table', {message: tableNum});
+	}
+});
+</script>
+
+<script src="../routes/ordering.js"></script>
+
+</head>
+
+<body>
+
+
+<div class="container container-fluid">
+		<!-- BACK BUTTON -->
+		<div id="BACK">
+    			  <a href="index.html" class="backbtn btn btn-primary">BACK</a>
+    		</div>
+
+		<!--MODAL ALERT-->
+		<div class="modal fade" id="f911Alert" data-backdrop="false" role="dialog">
+                        <div class="modal-dialog">
+                                <div class="modal-content">
+                                        <div class="modal-header">
+                                                <h4>Alert Sent</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                                <p class="alert">Staff have been alerted and will arrive to help you shortly!</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                                <button class="btn btn-primary ok">OK</button>
+                                        </div>
+                                </div>
+                        </div>
+</div>
+
+
+		<!--MODAL MODIFY-->
+                <div class="modal fade" id="modFood" data-backdrop="false" role="dialog">
+                        <div class="modal-dialog">
+                                <div class="modal-content">
+                                        <div class="modal-header">
+                                                <h4>Modify</h4>
+                                        </div>
+                                        <div class="modal-body modify-Food">
+                                                <form>
+    							<div class="form-group">
+      							<label for="txt-mod">Add any Extra Modifications:</label>
+      								<textarea class="form-control" rows="2" maxlength="120" id="txt-mod" placeholder="e.g. (vegan toppings, add extra sauces, etc..)"></textarea>
+    							</div>
+  						</form>
+						
+                                        </div>
+                                        <div class="modal-footer">
+                                                <button class="btn btn-primary okMod">OK</button>
+                                        </div>
+                                </div>
+                        </div>
+</div>
+
+
+
+	<div class="row">
+			
+		<div id="foodMenu" class="col-6">
+
+
+		<h1>MENU</h1>
+	<!-- APPETIZERS --> 
+	<div id="Appetizer">
+	<h1 id="foodType">Appetizers</h1>
+
+
+
+	</div>
+
+	<!-- ENTREES -->
+	<div id="Entree">
+	<h1 id="foodType">Entrees</h1>
+
+	</div>
+
+
+	<!-- DESSERTS -->
+	<div id="Dessert">
+	<h1 id="foodType">Desserts</h1>
+
+
+	</div>
+
+	<!-- DRINKS -->
+	<div id="Drink">
+	<h1 id="foodType">Drinks</h1>
+
+	</div>
+	
+
+	<!-- KIDS MENU --> 
+	<div id="Kids">
+	<h1 id="foodType">Kids</h1>
+	
+
+	</div> 
+
+	<button class="btn btn-primary allCalories">Show All Calories</button>
+
+</div>
+
+
+<!--- ORDER SYSTEM -->
+<div id="orderPage" class="col col-6" style="width: 40%">
+<h1>ORDER</h1>
+	<table class="table table-light">
+            <thead>
+            <tr class="key"><th scope="col">#</th>
+            <th scope="col" style="width: 175px;">Your Order</th>
+            <th scope="col">Price</th>
+            </tr></thead>
+            <tbody>
+            </tbody>
+          </table>
+	<!-- TAX -->
+	<div class="PRICE container container-fluid">
+	<div class="container container-fluid TAX" style="margin-left: 5px;">
+		<div class="calcTax">+ $0.00</div>
+	</div>
+	<div class="container container-fluid TOTAL" style="margin-left: 5px;">
+		<div style="display: inline-block; width: 80px;">TOTAL</div>
+		<div class="totalPrice">$0.00</div>
+	</div>
+	</div>
+	<!--BUTTONS FOR ORDER-->
+	<div class="orderBUTTONS btn-group btn-group-md" role="group">
+            <button type="button" class="btn btn-danger f911">Food 911</button>
+	    <button style="display: none;" type="button" class="btn btn-warning refill">Refill</button>
+              <button type="button" class="btn btn-dark rptItem">Repeat</button>
+                <button type="button" class="btn btn-dark rmvItem">Remove</button>
+                <button type="button" class="btn btn-dark modItem">Modify</button>
+                <button type="button" class="btn btn-dark confirm">Confirm</button>
+          </div>
+
+</div>
+
+
+	</div>
+
+</div>
+
+
+
+
+
+</body>
+
+
+</html>
