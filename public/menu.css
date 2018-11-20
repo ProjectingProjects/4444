@@ -1,0 +1,188 @@
+.modal {
+	background-color: rgba(0, 0, 0, 0.3);
+	z-index: 2;
+	position: fixed;
+	max-width: 100%;
+	width: 100%;	
+}
+
+thead {
+	width: 320px;
+}
+
+table, tbody {
+	width: 320px !important;
+	display: inline-block;
+}
+
+.PRICE {
+	background-color: white;
+	max-width: 320px;
+	margin-left: 0px;
+}
+
+tr {
+  display:flex;
+  flex-wrap: wrap; /* allow to wrap on multiple rows */
+}
+td {
+  display:block;
+  flex:1 /* to evenly distributs flex elements */
+}
+
+#defTxt, #modTxt {
+	width: 100%;
+	flex: auto;
+}
+
+body {
+	background: url(/res.png) no-repeat center center fixed;
+	background-size: cover;
+
+}
+
+p {
+	display:inline-block;
+	font-size: 15px;
+	text-align: justify;
+}
+
+.alert-title {
+	display:inline-block;
+}
+
+.alert {
+	width: 90%;
+	height: 100px;
+	background-color: #FF6666;
+	color: white;
+	margin: auto;
+	display: block;
+}
+
+.alert-text {
+	font-size: 15px;
+
+}
+
+.closebtn {
+	margin-right: 5px;
+	display:inline-block;
+	font-size: 25px;
+}
+
+.hide-block {
+	display: none;
+
+}
+
+.TOTAL {
+	max-width: 320px;
+}
+
+.orderFood {
+	width: 400px;
+}
+
+.orderBUTTONS {
+	margin-top: 15px;
+	margin-left: 15px;
+}
+
+.TAX {
+	max-width: 320px;
+	height: 30px;
+}
+
+.totalPrice {
+	float: right;
+}
+
+.calcTax {
+	float: right;
+}
+
+.name {
+	display: inline-block;
+}
+
+.price {
+	display: inline-block;
+	float: right;
+	margin-right: 5px;
+}
+
+.descrip {
+	display: none;
+	webkit-transition: all 1.5s ease-out;
+        -moz-transition: all 1.5s ease-out;
+        -o-transition: all 1.5s ease-out;
+        transition: all 1.5s ease-out;
+}
+
+.calories {
+	display: none;
+	font-size: 15px;	
+}
+
+.item {
+	padding-left: 5px;
+	width: 250px;
+	height: 28px;
+	border-radius: 10px;
+	background-color: #006994;
+	color: white;
+	-moz-user-select: none; /* Firefox */
+      	-ms-user-select: none; /* Internet Explorer */
+      	-khtml-user-select: none; /* KHTML browsers (e.g. Konqueror) */
+	-webkit-user-select: none; /* Chrome, Safari, and Opera */
+  	-webkit-touch-callout: none; /* Disable Android and iOS callouts*/
+	-webkit-transition: all 0.5s ease-out;
+  	-moz-transition: all 0.5s ease-out;
+  	-o-transition: all 0.5s ease-out;
+  	transition: all 0.5s ease-out;
+}
+
+.item:hover {
+	height: 90px;
+}
+
+.item:hover .descrip {
+	display: block !important;
+}
+
+.food {
+	  -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer */
+        -khtml-user-select: none; /* KHTML browsers (e.g. Konqueror) */
+        -webkit-user-select: none; /* Chrome, Safari, and Opera */
+        -webkit-touch-callout: none; /* Disable Android and iOS callouts*/
+
+}
+
+.modEnabled {
+	background-color: #003366;
+}
+
+.highlighted {
+	background-color: #FFFF99;
+
+}
+
+#foodMenu {
+	background-color: #F2AC66;
+	padding: 15px;
+}
+
+#foodType {
+	color: #003366;
+	font-family: 'Courgette', cursive;
+}
+
+#orderPage {
+	background-color: #F2AC66;
+}
+
+.itP {
+	margin-right: 15px;
+}

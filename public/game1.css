@@ -1,0 +1,80 @@
+html,
+body {
+  height: 100%;
+  font-family: 'Open Sans', sans-serif;
+  background-color: white;
+}
+
+.title {
+  font-size: 42px;
+  color: black;
+}
+
+
+.flex-container {
+  display: flex;
+}
+
+.flex-column{
+  flex-direction: column;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.flex-center {
+  justify-content: center;
+  align-items: center;
+}
+
+.board-container {
+  height: 100%;
+  width: 100%;
+}
+
+.board {
+  width: 408px;
+}
+
+.unit {
+  width: 125px;
+  height: 125px;
+  border: 3px solid black;
+  background-color: white;
+  font-size: 50px;
+}
+
+.unit:hover {
+  background-color: #9dc0f9;
+  transition: 0.3s;
+}
+
+.winner {
+  display:none;
+  padding: 10px;
+  font-size: 32px;
+  color: blue;
+}
+
+.reset {
+  margin-bottom: 20px;
+}
+
+.points {
+  font-size: 30px;
+  padding: 10px 10px 15px 15px;
+}
+
+.backbtn {
+  width: 200px;
+  height: 50px;
+  background-color: #DC143C;
+  color: white;
+}
+
+#BACK {
+  position: absolute;
+  margin-top: 50px;
+  margin-left: 50px;
+}
