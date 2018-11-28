@@ -40,6 +40,21 @@ function colorProcessing(event){
     if(thisClass != frstClass){
       var sectionColor = frstButton.css("background-color");
       thisButton.css("background-color", sectionColor);
+      
+      var secID = frstButton.attr("id");
+      thisButton.toggleClass(secID, true);
+      if(secID == 'section1'){
+        thisButton.toggleClass('section2 section3', false);
+      }
+      else if(secID == 'section2'){
+        thisButton.toggleClass('section1 section3', false);
+      }
+      else if(secID == 'section3'){
+        thisButton.toggleClass('section1 section2', false);
+      }
+      else{
+        console.log("ERROR getting section number from sectionButton.class");
+      }
 
       frstButton = "NONE";
       frstClass  = "NONE";
@@ -53,6 +68,21 @@ function colorProcessing(event){
     if(thisClass != frstClass){
       var sectionColor = thisButton.css("background-color");
       frstButton.css("background-color", sectionColor);
+
+      var secID = thisButton.attr("id");
+      frstButton.toggleClass(secID, true);
+      if(secID == 'section1'){
+        frstButton.toggleClass('section2 section3', false);
+      }
+      else if(secID == 'section2'){
+        frstButton.toggleClass('section1 section3', false);
+      }
+      else if(secID == 'section3'){
+        frstButton.toggleClass('section1 section2', false);
+      }
+      else{
+        console.log("ERROR getting section number from sectionButton.class");
+      }
       
       frstButton = "NONE";
       frstClass  = "NONE";
@@ -86,29 +116,14 @@ function sendData(event){
   console.log("sending assignment data...");
   var socket = io({transports: ['websocket']});
   
-  //get assign states
-  var svr1Color = $("#server1").css("background-color");
-  var svr2Color = $("#server2").css("background-color");
-  var svr3Color = $("#server3").css("background-color");
-  
-  var secColors = [];
-  var currColor = $("#section1").css("background-color");
-      secColors.push(currColor);
-      
-      currColor = $("#section2").css("background-color");
-      secColors.push(currColor);
-      
-      currColor = $("#section3").css("background-color");
-      secColors.push(currColor);
-  //END get assign states
-  
-  //make array of assignments
-  var assignments = {}
-      assignments.s1 = (secColors.indexOf(svr1Color))+1;
-      assignments.s2 = (secColors.indexOf(svr2Color))+1;
-      assignments.s3 = (secColors.indexOf(svr3Color))+1;
-  
-  socket.emit('managerAssign', assignments);
-}//end sendData
 
+  var svr1 = $(".section1").text();
+  var svr2 = $(".section2").text();
+  var svr3 = $(".section3").text(); 
 
+  var assignment = [svr1, svr2, svr3];  
+
+  console.log(assignment);
+  socket.emit('managerAssign', assignment);
+
+}

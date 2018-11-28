@@ -1,3 +1,5 @@
+var socket = io({transports: ['websocket']});
+
 //populates food item tabs for editing
 $(document).ready(function(){
   console.log("running editMenuItems.js script");
@@ -15,109 +17,76 @@ $(document).ready(function(){
 			$(data.menu).each(function(index, value){
 			
       ///////////////////////////////////////////////////////
-	  //create tabs for each food item in foodType category//
+      //create tabs for each food item in foodType category//
       ///////////////////////////////////////////////////////
       //create string for tab hrefs(need to add non-word character codes
       var nme = makeIDrefString(value);
-      /*
-      var nme = "";
-      //LOOP THRU non-word characters in itemName
-      var i = 0;
-      var count = 0;
-      while((i < value.name.length)&&(i >= 0)){
-        console.log("loop iteration: "+(count++));
-        console.log("i= "+i);
-        if(i==0)
-          var nonWindex = ((value.name).substring(i)).search(/\W/);
-        else if(i < (value.name.length - 1))
-          var nonWindex = ((value.name).substring(i+1)).search(/\W/);
-        else{//else last char(so can't have any more char codes to add... so just add last char)
-          nme += value.name[i];
-          break;
-        }
-        if(nonWindex < 0){//if didn't find non-word chars
-          nme += (value.name).substring(i);
-          console.log("nonWindex= \""+nonWindex+"\"");
-          break;//!!!EXIT LOOP HERE!!!//
-        }
-        else{//else found non-word chars
-          if(i==0){
-            var decCode = (value.name).substring(i).charCodeAt(nonWindex);
-            var hexCode = decCode.toString(16).toUpperCase();
-            console.log("hexCode: \\"+hexCode);
-            nme += (value.name).substring(i, i+nonWindex) + "\\" + hexCode;
-            
-            if(nonWindex == 0){
-              nme += " ";
-              ++i;
-            }
-            else{
-              nme += " ";
-              i += nonWindex+1;
-            }
-          }
-          else{
-            var decCode = (value.name).substring(i+1).charCodeAt(nonWindex);
-            var hexCode = decCode.toString(16).toUpperCase();
-            console.log("hexCode: \\"+hexCode);
-            nme += (value.name).substring(i, i+1+nonWindex) + "\\" + hexCode + " ";
-            
-            i += (nonWindex+2);
-          }
-        }//end else found non-word chars
-      }//END LOOP THRU non-word characters in itemName
-      
-      console.log("END make href string");
-      */
 			var nav_item=
-            "<li class=\"nav-item d-xl-flex\" style=\"background-color: #515151\">"+
-            "<a id=\""+value.name+"-tab\" role=\"tab\" data-toggle=\"pill\" href=\"#"+nme+"Tab\" class=\"nav-link text-center d-xl-flex justify-content-xl-center align-items-xl-center\" style=\"height: 100%;padding: 0px;width: 100%;\">"+value.name+"</a>"+
-			"</li>";
+        "<li class=\"nav-item d-xl-flex itemTabItem\" style=\"background-color: #515151\">"+
+        "<a id=\""+value.name+"-tab\" role=\"tab\" data-toggle=\"pill\" href=\"#"+nme+"Tab\" class=\"nav-link text-center d-xl-flex justify-content-xl-center align-items-xl-center\" style=\"height: 100%;padding: 0px;width: 100%;\">"+value.name+"</a>"+
+        "</li>";
             
-            //add tab to list of food items
-            var addto = "#"+value.category+"Tab .foodItemTabs";
-            $(addto).append(nav_item);
-            var newel = addto+" #"+value.name+"-tab";
-            //resize text
-            //textFit($(newel), {alignHoriz: true, alignVert: true});
-            
-            //create pane for that item
-            var tab_pane=
-            "<div id=\""+value.name+"Tab\" class=\"tab-pane\" role=\"tabpanel\" style=\"height: 100%;\">"+
-              "<div class=\"d-flex flex-column\" style=\"height: 100%;background-color: rgba(241,242,240,0.6);\">"+
-                "<div class=\"row flex-fill\" style=\"margin: 0px;\">"+
-                  "<div class=\"col d-flex flex-column justify-content-center align-items-center\">"+
-                    "<button class=\"btn btn-primary availButton\" type=\"button\" id=\"available\" style=\"width: 50%;height: 50%; background-color: rgb(0, 123, 255); color: rgb(255, 255, 255);\">Available</button>"+
-                  "</div>"+
+        //add tab to list of food items
+        var addto = "#"+value.category+"Tab .foodItemTabs";
+        $(addto).append(nav_item);
+        var newel = addto+" #"+value.name+"-tab";
+        //resize text
+        //textFit($(newel), {alignHoriz: true, alignVert: true});
+        
+        //check if item is the current special
+        var activeClass = "";
+        socket.emit('isSpecial', value.name, function(isSpecial){
+          if(isSpecial){
+            console.log(value.name+"isSpecial=1");
+            //if item is special set this to "active"
+            //so "active" can be added to the class of this item's "specialButton"
+            activeClass = " active";
+          }//end if value.name isSpecial
+          
+          console.log("activeClass="+activeClass);
+        
+          //create pane for that item
+          var tab_pane=
+          "<div id=\""+value.name+"Tab\" class=\"tab-pane\" role=\"tabpanel\" style=\"height: 100%;\">"+
+            "<div class=\"d-flex flex-column\" style=\"height: 100%;background-color: rgba(241,242,240,0.6);\">"+
+              "<div class=\"row flex-fill\" style=\"margin: 0px;\">"+
+                "<div class=\"col d-flex flex-column justify-content-center align-items-center\">"+
+                  "<button class=\"btn btn-primary availButton active\" type=\"button\" id=\"available\" style=\"width: 50%;height: 50%; background-color: rgb(0, 123, 255); color: rgb(255, 255, 255);\">Available</button>"+
                 "</div>"+
-                "<div class=\"row flex-fill\" style=\"margin: 0px;\">"+
-                  "<div class=\"col d-flex justify-content-center align-items-center\">"+
-                    "<button class=\"btn btn-primary availButton\" type=\"button\" id=\"NOTavailable\" style=\"width: 50%;height: 50%;background-color: rgb(81,81,81);color: rgb(137,137,137);\">Not Available</button>"+
-                  "</div>"+
-                "</div>"+
-                "<div class=\"row flex-fill\" style=\"margin: 0px;\">"+
-                  "<div class=\"col\"></div>"+
-                  "<div class=\"col d-flex justify-content-center align-items-center\">"+
-                    "<button class=\"btn btn-primary\" type=\"submit\" id=\"confirm\" style=\"width: 50%;height: 25%;background-color: rgb(28,60,95);color: #c2d0cd;\">Confirm</button>"+
-                  "</div>"+
-                "</div>"
               "</div>"+
-            "</div>";
-            
-            console.log(tab_pane);
-            
-            //add pane to div of panes
-            addto = "#"+value.category+"Tab .foodItemPanes";
-            $(addto).append(tab_pane);
-            newel = addto+" #"+value.name+"Tab";
-            //resize text
-            //textFit($(newel), {alignHoriz: true, alignVert: true});
-			
+              "<div class=\"row flex-fill\" style=\"margin: 0px;\">"+
+                "<div class=\"col d-flex justify-content-center align-items-center\">"+
+                  "<button class=\"btn btn-primary availButton\" type=\"button\" id=\"NOTavailable\" style=\"width: 50%;height: 50%;background-color: rgb(81,81,81);color: rgb(137,137,137);\">Not Available</button>"+
+                "</div>"+
+              "</div>"+
+              "<div class=\"row flex-fill\" style=\"margin: 0px;\">"+
+                "<div class=\"col d-flex justify-content-center align-items-center\">"+
+                  "<button class=\"btn btn-primary specialButton"+activeClass+"\" type=\"button\" id=\"special\" style=\"width: 70%;height: 40%;background-color: rgb(81,81,81);color: rgb(137,137,137);\">Make Special</button>"+
+                "</div>"+
+                "<div class=\"col d-flex justify-content-center align-items-center\">"+
+                  "<button class=\"btn btn-primary confirmButton\" type=\"submit\" id=\"confirm\" style=\"width: 50%;height: 25%;background-color: rgb(28,60,95);color: #c2d0cd;\">Confirm</button>"+
+                "</div>"+
+              "</div>"
+            "</div>"+
+          "</div>";
+          
+          //console.log(tab_pane);
+          
+          //add pane to div of panes
+          addto = "#"+value.category+"Tab .foodItemPanes";
+          $(addto).append(tab_pane);
+          newel = addto+" #"+value.name+"Tab";
+          //resize text
+          //textFit($(newel), {alignHoriz: true, alignVert: true});
+        
+          $(".availButton, .specialButton").on("click", toggle);
+          $(".confirmButton").on("click", sendChngs);
+          //$(".itemTabItem > a").on("click", setItemStatus);
+        });//end emit('isSpecial')			
 			});//end LOOP THRU EACH data	
-		}//end success: function(data)
+		
+    }//end success: function(data)
 	});//END grab JSON file with menu data
-  
-  $(".availButton").on("click", toggle);
 });//END $(document).ready(function(){})
 
 //colorPalette for availButtons... index indicates "bool active" value
@@ -139,6 +108,7 @@ function toggle(event){
   console.log("thisTabID="+thisTabID);
   console.log("thisTabIDrefString="+thisTabIDrefString);
     
+  /*  
   //chng thisButton's color to on
   thisButton.css("background-color", availColors[1]);
   thisButton.css("color", availFontColors[1]);
@@ -151,6 +121,105 @@ function toggle(event){
     $("#"+thisTabIDrefString+" #available").css("background-color", availColors[0]);
     $("#"+thisTabIDrefString+" #available").css("color", availFontColors[0]);
   }
+  */
+  if($("#"+thisTabIDrefString+" #"+thisID).hasClass("availButton")){
+    $("#"+thisTabIDrefString+" #available").toggleClass("active");
+    $("#"+thisTabIDrefString+" #NOTavailable").toggleClass("active");
+  }
+  else if($("#"+thisTabIDrefString+" #"+thisID).is($("#"+thisTabIDrefString+" #special"))){
+    $("#"+thisTabIDrefString+" #special").toggleClass("active");
+  }
   else
     console.log("Error finding button");
 }//end toggle
+
+function sendChngs(event){
+  console.log("checking active states...");
+  
+  var thisElem = $(event.target);
+  var thisButton = $(event.target).closest("button");//get thisButton
+  var thisID = thisButton.attr("id");
+  var thisTabID = thisButton.closest(".tab-pane").attr("id");//get thisTabPane
+  
+  var value = {name: thisTabID};
+  var thisTabIDrefString = makeIDrefString(value);//get thisTabPane's selector string
+  var itemName = thisTabID.substring(0,thisTabID.lastIndexOf("Tab"));
+  console.log("itemName="+itemName);
+  console.log("thisID="+thisID);
+  console.log("thisTabID="+thisTabID);
+  
+  //if this item's avail button is active
+  if($("#"+thisTabIDrefString+" #available").hasClass("active")){
+    socket.emit('chngAvail', itemName, 1);
+  }
+  else{//else NOTAvail is active
+    socket.emit('chngAvail', itemName, 0);
+  }
+  
+  //if item marked as special
+  if($("#"+thisTabIDrefString+" #special").hasClass("active")){
+    console.log("Sending itemName to make special...");
+    socket.emit('makeSpecial', itemName,
+      function(response){
+        if(response == "success"){
+          console.log("successfully updated special item in DB");
+        }
+        else{
+          console.log("ERROR updating special item in DB");
+        }
+      }//end getResponse
+    );//end emit 'makeSpecial' 
+  }//end if item marked as special
+  
+}//end sendChngs
+
+function setItemStatus(event){
+  //get thisTab
+  var thisLink = $(event.target);
+  var thisID = thisLink.attr("id");//get thisButton's ID
+  var itemName = thisID.substring(0,thisID.lastIndexOf("-tab"));//get itemName
+  var thisTabID = itemName+"Tab";
+  
+  var value = {name: thisTabID};
+  var thisTabIDrefString = makeIDrefString(value);//get thisTabPane's selector string
+  console.log("itemName="+itemName);
+  console.log("thisID="+thisID);
+  console.log("thisTabID="+thisTabID);
+  
+  /*
+  socket.emit('isAvail', itemName,
+    function(isAvail){
+      if(isAvail){//if itemName isAvail
+        $("#"+thisTabIDrefString+" #available").toggleClass("active", true);
+        $("#"+thisTabIDrefString+" #NOTavailable").toggleClass("active", false);
+      }
+      else{//else NOT isAvail
+        $("#"+thisTabIDrefString+" #available").toggleClass("active", false);
+        $("#"+thisTabIDrefString+" #NOTavailable").toggleClass("active", true);
+      }
+    }//end getResponse
+  );//end emit('isAvail')
+  */
+  socket.emit('isSpecial', itemName,
+    function(isSpecial){
+      if(isSpecial){//if itemName isSpecial
+        $("#"+thisTabIDrefString+" #special").toggleClass("active", true);
+      }
+      else{//else not special
+        $("#"+thisTabIDrefString+" #special").toggleClass("active", false);
+      }
+    }//end getResponse
+  );//end emit('isSpecial')
+}
+
+
+
+
+
+
+
+
+
+
+
+

@@ -403,7 +403,8 @@ console.log(orderJSON);
 			document.cookie = "order=" + order + ";" + expires + ";path=/";
 			
 			var x = document.cookie;
-			console.log(x);
+			console.log("cookie:"+x);
+      console.log("~~~~~~~~~~~~~~~~~~~~");
 
                         socket.emit('confirm', orderJSON);
 
@@ -417,7 +418,10 @@ console.log(orderJSON);
 		//send customer back to index
                 socket.on('orderAck', function(msg) {
 			alert("Order Received!");
-			window.location.href = "index.html";
+			if (tableCookie == 99)
+				window.location.href = "paymentDash.html";
+			else
+				window.location.href = "index.html";
 		});
 	
 

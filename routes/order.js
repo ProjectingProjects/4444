@@ -94,6 +94,7 @@ module.exports=
 	{
 
                 console.log("Placing Order on DB Table ");
+                console.log("orderNum:"+order);
 
 		// Converts json string into object to be manipulated
 		var data = JSON.parse(jsonOrder);
@@ -115,13 +116,16 @@ module.exports=
 
 			// Stores the info of the table into its DB table		
 			console.log(item + " cost: " + price + " with mods of " + options);
-                	connection.query('INSERT INTO table' + tableNum + ' (menuItem, menuPrice, stat, orderNum) VALUES (?,?,0,?);', [item, price, 0, order], function(error, results, fields) {
+      console.log("orderNum:"+order);
+      console.log("tableNum="+tableNum);
+                	connection.query('INSERT INTO table' + tableNum + ' (menuItem, menuPrice, orderNum, stat) VALUES (?,?,?,0);', [item, price, order, 0], function(error, results, fields) {
                         if(error) throw error;
-			//else {
+			console.log("order after insert:"+order);
+      //else {
 			//	console.log(item + " added to table's table");
 			//}
 			});
-			//total += price;
+			total += parseFloat(price);
 		} // End of for loop
 
 		console.log("Sending Order to Kitchen");
@@ -138,7 +142,7 @@ module.exports=
 		}
 		});
 
-		connection.query('INSERT INTO orders(tableNum, date, cost, paid) VALUES (?,CURTIME(), 0, 0);',[tableNum], function(error, results, fields) {
+		connection.query('INSERT INTO orders(tableNum, date, cost, paid) VALUES (?,CURDATE(), ?, 0);',[tableNum, total], function(error, results, fields) {
 			if(error) throw error;
 			else
 			{
@@ -246,99 +250,84 @@ module.exports=
 	},
 	
 	assignTables: function(groupServ) {
-		var tabBeg;
-		var tabEnd;
-
-		var server1 = 'Victor';
-		var server2 = 'Eddie';
-		var server3 = 'Louise';
-
-		var sec1 = groupServ.s1; // Victor 2
-		var sec2 = groupServ.s2; // Eddie 3 
-		var sec3 = groupserv.s3; // Louise 1
-
-		if(sec1 == 1)
-		{
-			tabBeg = 1;
-			tabEnd = 9;
-		}
-		else if(sec1 = 2)
-		{
-			tabBeg = 10;
-			tabEnd = 17;
-		}
-		else
-		{
-			tabBeg = 18;
-			tabEnd = 25;
-		}
-		console.log("Victor getting tables " + tabBeg + " to " + tabEnd);
-		for(tabBeg; tabBeg < tabEnd; tabBeg++)
-			{
-				connection.query('UPDATE tableOrg SET server = ? WHERE tableNum = ?;', ['Victor', tabBeg], function(error, results, fields) {
-				if(error) throw error;
-				else {
-					console.log("Table " + tableNum + " switched");
-				}
-				});
-			}
-		
-
-		if(sec2 == 1)
-		{
-			tabBeg = 1;
-			tabEnd = 9;
-		}
-		else if(sec2 = 2)
-		{
-			tabBeg = 10;
-			tabEnd = 17;
-		}
-		else
-		{
-			tabBeg = 18;
-			tabEnd = 25;
-		}
-		
-		for(tabBeg; tabBeg < tabEnd; tabBeg++)
-			{
-				connection.query('UPDATE tableOrg SET server = ? WHERE tableNum = ?;', ['Eddie', tabBeg], function(error, results, fields) {
-				if(error) throw error;
-				else {
-					console.log("Table " + tableNum + " switched");
-				}
-				});
-			}
-		
-
-		if(sec3 == 1)
-		{
-			tabBeg = 1;
-			tabEnd = 9;
-		}
-		else if(sec3 = 2)
-		{
-			tabBeg = 10;
-			tabEnd = 17;
-		}
-		else
-		{
-			tabBeg = 18;
-			tabEnd = 25;
-		}
-		
-		for(tabBeg; tabBeg < tabEnd; tabBeg++)
-			{
-				connection.query('UPDATE tableOrg SET server = ? WHERE tableNum = ?;', ['Louise', tabBeg], function(error, results, fields) {
-				if(error) throw error;
-				else {
-					console.log("Table " + tableNum + " switched");
-				}
-				});
-			}
-		
-
-
-						
-	}
+		var sec1Server = groupServ[0]; // Victor 2
+		var sec2Server = groupServ[1]; // Eddie 3 
+		var sec3Server = groupServ[2]; // Louise 1
+    
+		groupServ.forEach(function(name, index){
+      connection.query('UPDATE tableOrg SET server = ? WHERE tableNum>=? AND tableNum<=?;',
+                         [name, (index*8)+1, (index+1)*8],
+                         function(error, results, fields){
+                           if(error) throw error;
+                         }//end mySQL callback
+      );//end update mySQL DB
+    });//end foireach name
+	},//end assignTables
+  
+  //this function gets the cost and date cols of orders table for last 7 days of orders sorted by date in descending order
+  getOrderHistory: function(callback) {
+		connection.query('SELECT cost, date FROM orders WHERE date > (CURDATE() - INTERVAL 7 DAY) AND cost != 0 ORDER BY date DESC;',  function(error, results, fields) {
+		if(error) throw error;
+		else {//if no error, send orderHist
+		  console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~results=");
+      for(var orderRec = 0; orderRec < results.length; ++orderRec){
+        console.log(results[orderRec]);
+      }
+      callback(results);
+      
+      /*
+      var currOrd = {};
+      var dateLstObj = {};
+      var dateLst = [];
+      //LOOP THRU ADDING UP SALES BY DAY
+      for(var i = 0 ; i < results.length; ++i){
+        currOrd = results[i];
+        var currDate = currOrd.date;
+        var currCost = currOrd.cost;
+        
+        //if first order of this date
+        if(dateLstObj[currDate] == undefined){
+          dateLstObj[currDate] = Decimal(currCost);
+          dateLst.push({[currDate]:Decimal(currCost)});
+        }
+        else{//else we've already had an order for that date
+          dateLstObj[currDate] = Decimal.add(dateLstObj[currDate], currCost);
+          
+          //LOOP THRU EACH of dateLst
+          dateLst.forEach(function(x){
+            if(currDate in x)
+              x[currDate] = Decimal.add(x[currDate], currCost);
+          });//END LOOP THRU EACH of dateLst
+        }
+      }//END LOOP THRU ADDING UP SALES BY DAY
+      //stringify object to be able to print to console.log()
+      
+      //var dateLstObjJSON = JSON.stringify(dateLstObj);
+      //console.log("dateLstObj="+dateLstObjJSON);
+      
+      var dateLstJSON = JSON.stringify(dateLst);
+      console.log("dateLst="+dateLstJSON);
+      
+			callback(dateLst);
+      */
+		}//END send orderHist
+		});//end mySQL query
+	}//end getOrderHistory
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

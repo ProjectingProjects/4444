@@ -21,7 +21,7 @@ $(document).ready(function() {
   let lcat = [["casino royale", "django: unchained", "baby driver", "pirates of the carribbean"],
   ["bohemian rhapsody", "we found love", "thriller", "blank space", "live and let die"],
   ["jack nicholson", "selena gomez", "hailee steinfeld", "leonardo dicaprio", "joaquin phoenix", "kiefer sutherland"],
-  ["bruce wayne", "black widow", "doctor stephen strange", "captain america", "spiderman", "miles morales",
+  ["swamp thing", "bruce wayne", "black widow", "doctor stephen strange", "captain america", "spiderman", "miles morales",
   "deadpool"]];
 
   //random text subtitles for win or lose states
