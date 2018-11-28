@@ -1,5 +1,7 @@
-const express = require('express')
+const express  = require('express')
 var bodyParser = require('body-parser')
+var Decimal    = require('decimal.js');
+var _          = require('underscore');
 //var userLogin = require('./routes/login');
 var getOrder = require('./routes/order');
 var menuUp = require('./routes/menuCall');
@@ -27,19 +29,24 @@ io.on('connection', function(socket){
 		var waiter;
 
 	socket.on('arrival', function(msg) {
-
-   	     console.log('Table connected.\nFind them an order and table');
-	
-		
-
-     	   getOrder.tableFind(function(tablenum) {
-			getOrder.tableRes(tablenum);
-  	              console.log("Open Table: " + tablenum);
- 	               socket.emit('table', tablenum)
-		table = tablenum;
- 	       });
-
-	});
+    console.log('Table connected.\nFind them an order and table');
+    if(msg == 'Takeout'){//if takeout kiosk
+      var tablenum = 99;
+      getOrder.tableRes(tablenum);//mark table as occupied
+      console.log("Open Table: " + tablenum);
+      socket.emit('table', tablenum)//emit the opened tableNum
+      table = tablenum;
+    }
+    else{//else actual table
+      getOrder.tableFind(function(tablenum) {
+        getOrder.tableRes(tablenum);//mark table as occupied
+        console.log("Open Table: " + tablenum);
+        socket.emit('table', tablenum)//emit the opened tableNum
+        table = tablenum;
+      });//end find table
+    }
+	});//end on('arrival')
+  
 	// The client responds with the tableAck and server.js finds the next available order number
 	socket.on('tableAck', function(tableAck) {
 		console.log("Waiter: " + table);
@@ -79,7 +86,7 @@ io.on('connection', function(socket){
 
 		
 
-
+    console.log("about to send order to DB orderNum:"+order);
 		getOrder.sendOrder(order, tableNum, jsonOrder, function(stuff) {
 			var size = stuff.order.length;
 
@@ -87,6 +94,8 @@ io.on('connection', function(socket){
 			{
 				var item = stuff.order[i];
 				console.log("Server: ", item);
+        console.log("orderNum: ", order);
+        console.log("tableNum: ", tableNum);
 				io.emit('kitchenOrderNum', order);
 				io.emit('orderItem', item);	
 				io.emit('tableOrd', tableNum);
@@ -183,7 +192,7 @@ io.on('connection', function(socket){
 
 	//Sending them as an array
 	socket.on('managerAssign', function(groupServ) {
-		//getOrder.assignTables(groupServ)
+		getOrder.assignTables(groupServ);
 		console.log(groupServ.s1);		
 		console.log(groupServ.s2);
 		console.log(groupServ.s3);
@@ -197,6 +206,81 @@ io.on('connection', function(socket){
 		menuUp.menuUpdate(msg);
 	});
 
-});
+  //gets order history, and adds up the sales by day,
+  //returning an array of objects, 1 object per day in the order history
+  //the objects in the returned array contain a Date obj and a cost property
+  //
+  //the cost property represents the total sales for that day as reflected by
+  //the order history
+  socket.on('requestSalesHistory', function(callback){
+    getOrder.getOrderHistory(function(sortedHist){
+      var salesHistByDay = [];
+      
+      //this block for printing out the sortedHist array
+      console.log("sortedHist=");
+      for(var i = 0; i < sortedHist.length; ++i){
+        console.log(sortedHist[i]);
+      }
+      
+      
+      //LOOP THRU ADDING UP SALES BY DAY//
+      for(var i = 0; i < sortedHist.length; ++i){
+        //get index of this date in salesHistByDay
+        var thisDate = sortedHist[i].date.getTime();
+        var indexOfThsDate = _.findIndex(salesHistByDay, function isSame(lstEl){
+          var lstElJSON = JSON.stringify(lstEl);
+          console.log("lstElJSON="+lstElJSON);
+          return (lstEl.date.getTime() == thisDate);
+        });
+        
+        if(indexOfThsDate == -1){//if no entry for this date, make one
+          salesHistByDay.push(sortedHist[i]);
+        }
+        else if(indexOfThsDate > -1){//else if already an entry, add to it
+          salesHistByDay[indexOfThsDate].cost =
+            Decimal.add(salesHistByDay[indexOfThsDate].cost, sortedHist[i].cost);
+        }
+      }//END LOOP THRU ADDING UP SALES BY DAY
+      
+      /*//stringify object to be able to print to console.log()
+      var salesHistByDayJSON = JSON.stringify(salesHistByDay);
+      console.log("salesHistByDay="+salesHistByDayJSON);
+      */
+      
+      callback(salesHistByDay);
+    });//end getOrderHistory
+  });//end socket.on(requestSalesHistory)
+  
+  //socket.on('chngAvail', itemName, isAvail);
+  
+  //tell menuUp to make itemName the new specialItem
+  socket.on('makeSpecial', function(itemName, callback){
+    console.log("makeSpecial_itemName="+itemName);
+    menuUp.updateSpecial(itemName, function(success){//call the function to update the DB
+      if(success){
+        callback("success");
+      }
+      else{
+        callback("Couldn't update special in dataBase");
+      }
+    });//end updateSpecial
+    
+  });//end on('makeSpecial')
+  
+  socket.on('isSpecial', function(itemName, callback){
+    console.log("isSpecial_itemName="+itemName);
+    menuUp.getSpecial(function(currSpecial){
+      console.log("isSpecial.currSpecial="+currSpecial);
+      
+      if(currSpecial == itemName){//if itemName isSpecial
+        callback(1);//send true
+      }
+      else{//else itemName NOT special
+        callback(0);//send false
+      }
+    });//end updateSpecial
+    
+  });//end on('makeSpecial')
+});//end catch signals
 
 http.listen(5000, () => console.log('Node listening on 5000\n'))
