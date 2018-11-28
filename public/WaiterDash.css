@@ -1,3 +1,8 @@
+#kioskRow{
+  position: relative;
+  top: 20vh;
+}
+
 .TableLabel {
   position: relative;
   bottom: 90px;
