@@ -74,7 +74,7 @@
 	Odds of winning are 1 in 5</p>
 
 <div class="container">
-  <span class="object centerthis id="group">
+  <span class="object centerthis" id="group">
 	<div class="btn-group" >
 		<button id="button1" onclick="oneinfive();removebuttons();">
 			<input type="image" src="https://d2gg9evh47fn9z.cloudfront.net/800px_COLOURBOX25358362.jpg" 
@@ -116,6 +116,7 @@
 			number = "You Lost! Better luck next time!";
 			document.getElementById("demo").innerHTML = number;
 		}
+		document.location.href = "index.html";
 	}
 	function removebuttons() {
 		document.getElementById('button1').remove();

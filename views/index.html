@@ -42,31 +42,37 @@
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav mx-auto">
             <li class="nav-item active px-lg-4">
-              <a class="nav-link text-uppercase text-expanded" href="index.html">AboutUs
+              <a class="nav-link text-uppercase text-expanded" href="index.html">About Us
                 <span class="sr-only">(current)</span>
               </a>
             </li>
 
-	    <li class="nav-item px-lg-4">
-              <a class="nav-link text-uppercase text-expanded" href="menu.html">Menu</a>
+            <li class="nav-item px-lg-4">
+              <a class="nav-link text-uppercase text-expanded dineIn" href="menu.html">Dine-In Menu</a>
+            </li>
+            
+            <li class="nav-item px-lg-4">
+              <a class="nav-link text-uppercase text-expanded toGo" href="takeout.html">To-go Menu</a>
             </li>
 
             <li class="nav-item px-lg-4">
               <a class="nav-link text-uppercase text-expanded" href="game1.html">Tic-Tac-Toe</a>
             </li>
-	    <li class="nav-item px-lg-4">
+            <li class="nav-item px-lg-4">
               <a class="nav-link text-uppercase text-expanded" href="game2.html">Hangman</a>
             </li>
-
 	    <li class="nav-item px-lg-4">
+              <a class="nav-link text-uppercase text-expanded" href="game3.html">Snake</a>
+            </li>
+            <li class="nav-item px-lg-4">
               <a style="display: none;" class="pay nav-link text-uppercase text-expanded" href="paymentDash.html">Payment</a>
             </li>
 		
-	    <li class="nav-item px-lg-4">
-              <button style="display: none; color: white;" class="btn btn-danger food911-btn">Food 911</button>
+            <li class="nav-item px-lg-4">
+              <button style="display: none; color: white;" class="btn btn-danger food911-btn">Request Help</button>
             </li>	
 
-	    <li class="nav-item px-lg-4">
+            <li class="nav-item px-lg-4">
               <button style="display: none;" class="btn btn-warning refill-btn">Request Refills</button>
             </li>	  
 
@@ -94,7 +100,7 @@
 
     <footer class="footer text-faded text-center py-5">
       <div class="container">
-        <p class="m-0 small">Copyright &copy; Your Website 2018</p>
+        <p class="m-0 small">Copyright &copy; Team JackSparrow 2018</p>
       </div>
     </footer>
 
@@ -130,6 +136,17 @@
 			$(".refill-btn").css('display', 'block');
 			$(".pay").css('display', 'block');
 		}
+
+		
+		if (tableCookie != undefined)
+		{
+			if (tableCookie == 99)
+				$(".dineIn").css('display', 'none');
+			else
+				$(".toGo").css('display', 'none');
+
+		}
+
 
 		$(".refill-btn").on("click", function() {
 

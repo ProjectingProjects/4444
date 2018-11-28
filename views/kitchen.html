@@ -44,8 +44,9 @@
 			var parentobj = $(this).parent().parent();
 
 			var cname = $(parentobj).attr('id');
+			console.log("cname1=\""+cname+"\"");
 			cname = cname.slice(0, -2);
-			console.log(cname);
+			console.log("cname2="+cname);
 
 			// Emitting
 			kitchSock.emit('foodPrepOrder', cname);

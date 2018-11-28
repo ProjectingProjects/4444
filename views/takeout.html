@@ -24,9 +24,6 @@
 <script>
 $(document).ready(function(){
 
-
-	let price = 0.0;
-
 	//grab JSON file with menu data
 	$.ajax({
 		async: false,
@@ -40,20 +37,9 @@ $(document).ready(function(){
 			
 			if(value.avail == 1)
 			{
-				if (value.isSpecial == 1)
-				{
-					price = parseFloat(value.price) * 0.75;
-					console.log(price);
-				}	
-				else
-					price = value.price;	
-
-		
-			
-
 				//create containers for food items
 				var item="<div class=\"item\"><div id=\""+(index+1)+"\" class=\"name\">"+value.name+
-				"</div><div class=\"price\">"+price.toFixed(2)+"</div>"+
+				"</div><div class=\"price\">"+value.price+"</div>"+
 				"<div class=\"descrip\">"+value.descrip+"</div>"+
 				"</div></div><div><p class=\"calories c"+(index+1)+"\">"+value.calories+
 				"</p><button class=\"btn btn-primary calButt c"+(index+1)+"\">Show Calories</button></div>";
@@ -74,26 +60,10 @@ $(document).ready(function(){
 
 				modify = modify + "</div>";
 
-				console.log(value.isSpecial);
-
 				//get id
-				if (value.isSpecial == 1)
-				{
-					//show item of day element
-					$("#ItemofDay").css('display', 'block');
-					//append item to it
-					$("#ItemofDay").append(item);
-				
-				}
-				else
-				{
-
-					//add to category
-					var cat = "#" + value.category;
+				var cat = "#" + value.category;
 	
-					$(cat).append(item);
-				}		
-		
+				$(cat).append(item);
 				$(".modify-Food").prepend(modify);
 	                        
 				ing++;
@@ -149,29 +119,31 @@ $(document).ready(function(){
 	var cookie = Cookies.get('table');
 	if(cookie == null)
 	{
-		socket.emit('arrival', {message: 'Customer arrived'});
+		socket.emit('arrival', {message: 'Takeout'});
 		//socket.on();
 		//socket.emit('table', {message: 'No cookie set'});
 
 		socket.on('table', function(table) {
 			console.log("Connected");
-			console.log("Table: " + table);
-			socket.emit('tableAck', { message: 'This is table ' + table + ' reporting for duty!'});
+			console.log("Table: " + 99);
+			socket.emit('tableAck', { message: 'This is table ' + 99 + ' reporting for duty!'});
 	
 			// Cookie for the table number
 			var d = new Date();
 			d.setTime(d.getTime()+(7*24*60*60*1000));
 			var expires = "expires="+d.toUTCString();	
 
-			document.cookie = "table=" + table + ";" + expires + ";path=/";
+			document.cookie = "table=" + 99 + ";" + expires + ";path=/";
 			
 			var x = document.cookie;
 			console.log(x);
 		});
 
+    /*Don't need to get waiter because all wait-staff responsible for takeout
 		socket.on('waiter', function(waiter) {
 			console.log("Waiter: " + waiter);
 		});
+    */
 	}
 	else
 	{
@@ -245,13 +217,6 @@ $(document).ready(function(){
 
 
 		<h1>MENU</h1>
-	<!-- SPECIAL ITEM -->
-	<div id="ItemofDay" style="display: none;">
-	<h1 id="foodType">Item of the Day</h1>
-	
-
-
-	</div>
 	<!-- APPETIZERS --> 
 	<div id="Appetizer">
 	<h1 id="foodType">Appetizers</h1>
@@ -317,7 +282,7 @@ $(document).ready(function(){
 	</div>
 	<!--BUTTONS FOR ORDER-->
 	<div class="orderBUTTONS btn-group btn-group-md" role="group">
-            <button type="button" class="btn btn-danger f911">Request Help</button>
+            <button type="button" class="btn btn-danger f911">Food 911</button>
 	    <button style="display: none;" type="button" class="btn btn-warning refill">Refill</button>
               <button type="button" class="btn btn-dark rptItem">Repeat</button>
                 <button type="button" class="btn btn-dark rmvItem">Remove</button>
